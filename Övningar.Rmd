@@ -1,0 +1,85 @@
+---
+title: "Extra övningar till Statistisk inferensteori"
+author: "Martin Sköld"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+
+Angivna fördelningar är parametriserade som i Held & Bové, Appendix A5.
+
+---
+
+1. Bestäm Score-funktion och observerad Fisherinformation för
+    + $\theta$ då $X\sim Geom(\theta)$.
+    + $\psi=\theta^2$  då $X\sim Geom(\theta)$.
+    + $\theta$ då $X=(X_1,\ldots,X_n)$ och $X_i\sim LN(\theta,1)$ är oberoende.
+    + $\theta$ då $X=(X_1,\ldots,X_n)$ där $X_i\sim N(\theta i,1)$ är oberoende.
+
+---    
+
+2. Antalet bakterier i en odling dag $i$ kan beskrivas av en stokastisk variabel $X\sim Poisson(\lambda i)$. Ett laboratorium förbereder fem odlingar. Varje dag räknar man antalet bakterier i en av skålarna varefter den förstörs. Experimentet utfaller således med ett värde per dag under fem dagar, $x_1,\ldots,x_5$, där $x_i$ kan ses som en realisering av $X$ oberoende av övriga.
+    + Formulera en statistisk modell och bestäm en (en-dimensionell) tillräcklig (sufficient) statistika för $\lambda$.
+    + En alternativ strategi vore att räkna alla odlingarna den sista dagen, d.v.s.\ observera $y_1,\ldots,y_5$, oberoende realiseringar av $Y\sim Poisson(5\lambda)$. Jämför de två strategiernas Fisherinformation avseende $\lambda$.
+
+---
+    
+3. I en linjär modell, $\mathbf{Y}=\mathbf{A\theta}+\mathbf{\epsilon}$, där $\mathbf{Y}=(Y_1,\ldots,Y_N)^T$, $\mathbf{\theta}=(\theta_1\ldots\theta_k)^T$, $\mathbf{A}$ är en känd $N\times k$-matris och $\mathbf{\epsilon}$ en kolonnvektor oberoende $N(0,1)$. Visa att Fishers informationsmatris (förväntad som observerad) är $I(\theta)=J(\theta)=\mathbf{A}^T\mathbf{A}$.
+
+---
+
+4. Låt $x_1,\ldots,x_n$ beteckna mätningar (enhet $mm$) som kan anses vara oberoende realiseringar av $X$ med täthet $f_X(\cdot|\theta)$ och $y_1,\ldots,y_n$ samma mätningar konverterade till enhet $m$. Bestäm kvoten mellan likelihoodfunktionerna $L_X(\theta|x)/L_Y(\theta|y)$.
+
+---
+
+5. 1986 expoderade Rymdfärjan Challenger under uppskjutningen. Det spekuleras i att explosionen orsakades av en trasig gummipackning, som i sin tur gick sönder på grund av den kalla väderleken som rådde vid uppskjutningsdagen. I denna uppgift skall vi modellera sannolikheten att en dylik gummipackning går sönder som funktion av temperaturen med logistisk regression och undersöka osäkerheten i skattningar med Bootstrap.
+
+Data finns under namnet `orings` i paketet `faraway` (installera med `install.packages("faraway")`):
+```{r}
+library(faraway)
+head(orings)
+```
+här står `temp` för temperaturen vid uppskjutning och `damage` för antalet trasiga packningar av totalt 6.
+
+I den logistiska regressionsmodellen modellerar vi antalet trasiga packningar uppskjutning $i$ som $Y_i\sim Bin(6,\pi(t_i))$, där $\text{logit}(\pi(t_i))=\alpha+\beta t_i$ och $t_i$ är temperaturen. Vi kan anpassa modellen i R med
+```{r}
+modell<-glm(cbind(damage,6-damage)~temp,family=binomial,data=orings)
+```
+och får ML-skattningar av $\theta=(\alpha,\beta)$ genom
+```{r}
+modell$coeff
+```
+Bestäm ett standardfel för $\hat{\alpha}$ och ett konfidensintervall för $\beta$ baserat på Boostrap. Du simulerar observationer (motsvarande `damage`) från den anpassade modellen med `rbinom(23,size=6,prob=modell$fitted)`.
+
+---
+
+6. Antag att vi har oberoende observationer $X_1,\ldots,X_n$ från en $Exp(\theta)$-fördelning ($E_\theta(X_i)=1/\theta$) och vill skatta $\phi=P_{\theta}(X_1>1)$. Bestäm den asymptotiska fördelningen för plug-in skattaren $\hat{\phi}=P_{\hat{\theta}}(X_1>1)$, där $\hat{\theta}$ är ML-skattaren.
+
+---
+
+7. Använd resultatet i 6 för att konstruera en asymptotisk pivåvariabel $(\hat{\phi}-\phi)/se(\hat{\phi})$ och bestäm ett $P$-värde för hypotesen $H_0:\phi=1/2$ mot $H_1:\phi\neq 1/2$ givet att $\hat{\phi}=0.4$ och $n=100$.
+
+---
+
+8. Baserat på oberoende observationer $x_1,\ldots,x_{100}$ från en $N(\theta,\sigma^2)$-fördelning fås 95%:iga konfidensintervallet $(0.1,0.3)$ för $\theta$ baserat på $t$-statistikan (se (3.9) på kursbokens sida 60). Bestäm $P$-värdet för motsvarande $t$-test av hypotesen $H_0:\theta=0$.
+
+---
+
+9. Plotta en konfidensregion för $(\alpha,\beta)$ baserat på Score-statistikan i Weibull-modellen för AC-data (jämför motsvarande Wald och Likelihoodkvot region i slides F8).
+
+---
+
+10. Antag $x$ är en realisering av $X\sim Bin(10,\theta)$. Bestäm bias, varians och medelkvadratfel för följande skattare; $\hat{\theta}_1=x/10$, $\hat{\theta}_2=(x/10+1/2)/2$ och $\hat{\theta}_3=1/2$. Plotta även medelkvadratfelen som funktion av $\theta$ i samma figur.
+
+---
+
+11. I exemplet med livslängder från första föreläsningen antog vi att data bestod av ett fixt antal exponentialfördelade tider mellan fel. Om vi istället antar att vi observerat en Poissonprocess  under 2500 timmar, kan vi se antalet fel $n=28$ som en realisering av $N\sim Poisson(2500\theta)$. Plotta den relativa likelihoodfunktionen för båda modellerna i samma figur. Under vilka förutsättningar blir de approximativt lika? Data (tider mellan fel) ges av
+```{r}
+ac <- c(90, 10, 60, 186, 61, 49, 14, 24, 56, 20, 79, 84, 44, 59, 29, 118, 25, 156, 310, 76, 26, 44, 23, 62, 130, 208, 70, 101)
+```
+
+---
+
+12. (forts av 11) Ytterligare en variant av livslängderna är att vi betraktar det slumpmässiga utfallet som $(\tau_1,\ldots, \tau_{28})$, där $\tau_i=t_1+\ldots+t_i$ är tidpunkten för det $i$:te felet (i R `tau <- cumsum(ac)`). Bestäm likelihoodfunktionen och verifiera att den är proportionell mot likelihood för exponentialmodellen för aggregatens livslängder.
+
+---

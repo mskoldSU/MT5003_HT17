@@ -1,0 +1,67 @@
+---
+title: "Centrala begrepp och resultat"
+output: html_document
+---
+
+Tentamens basdel examinerar betygskriterier för betyg E, d.v.s. 'Studenten behärskar kursens mest centrala begrepp och resultat, samt kan lösa enkla standardproblem relaterade till dessa.'
+Kursens mest centrala begrepp och resultat följer nedan tillsammans med exempel på typer av frågor som kan förekomma på basdelen. På basdelen förekommer ej modeller med vektorvärda parametrar. Exempelfrågor hänvisar till situationen där vi observerat $x_1,\ldots,x_n$, oberoende realiseringar av en $Exponential(\theta_0)$-fördelad variabel $X$, $\theta_0>0$. 
+
+
+* Statistisk modell (definiera, formulera givet problemställning).
+    + Formulera problemet som en statistisk modell indexerad av en parameter $\theta$, ange speciellt modellens utfallsrum och parameterrum.
+
+* (log-) Likelihoodfunktion, relativ (log-) likelihoodfunktion (definiera, bestäm givet modell och data)
+    + Definiera begreppet relativ log-likelihood. Bestäm den relativa log-likelihoodfunktionen.
+
+* Scorefunktion (definiera, bestäm givet modell och data, visa grundläggande icke-asymptotiska frekventistiska egenskaper)
+    + Visa att under Fishers regularitetsvillkor gäller att $E_\theta(S(\theta))=0$. 
+
+* Fishers regularitetsvillkor (definiera, avgör om de är uppfyllda i enkla situationer)
+    + Visa att modellen uppfyller Fishers regularitetsvillkor.
+
+* Observerad och förväntad Fisher information (definiera, bestäm givet modell och data, visa grundläggande icke-asymptotiska frekventistiska egenskaper).
+    + Visa att för oberoende likafördelade data gäller $J_{1:n}(\theta)=nJ_1(\theta)$.
+
+* ML-skattaren (definiera, bestäm givet modell och data)
+    + Bestäm ML-skattaren.
+
+* ML-skattarens asymptotik (redogör för, bestäm givet modell)
+    + Bestäm den asymptotiska fördelningen för ML-skattaren.
+    
+* Delta-metoden (redogör för, tillämpa)
+    + Bestäm den asymptotiska fördelningen för $\exp(\hat{\theta})$, där $\hat{\theta}$ är ML-skattaren.
+
+* Tillräcklighet (definiera, exemplifiera, använda faktoriseringskriteriet för att bestämma alternativt avgöra om en given stickprovsvariabel är tillräcklig)
+    + Bestäm en en-dimensionell tillräcklig statistika för $\theta$.
+
+* Konsistens (definiera, exemplifiera, använd stora talens lag/continuous mapping theorem för att avgöra i enkla situationer)
+    + Visa att skattaren $\hat{\theta}=1/\bar{x}$ är en konsistent skattare av  $\theta_0$ (utan att hänvisa till generella resultat för ML-skattare).
+
+* Väntevärdesriktighet/bias (definiera, exemplifiera, avgör/bestäm givet skattare)
+    + Ge exempel på en skattare som är konsistent men inte väntevärdesriktig.
+
+* Bootstrap (exemplifiera, beskriv algoritm  givet modell, data och storhet som skall approximeras)
+    + Beskriv hur bias hos skattaren $\hat{\theta}=1/\bar{x}$ kan approximeras med Bootstrap, du kan förutsätta att du har tillgång till statistisk programvara som kan simulera från exponentialfördelningen.
+
+* Pivåvariabel (definiera, exemplifiera, tillämpa för konstruktion av test/konfidensintervall i enkla situationer)
+    + Visa att $\theta\bar{x}$ är en pivåvariabel, beskriv hur detta kan användas för att konstruera ett 95%-igt konfidensintervall (utan asymptotisk approximation).
+    
+* Hypotestest, enkel/sammansatt hypotes, $P$-värden och styrka (definiera, exemplifiera)
+    + Givet två tester $A$ och $B$ av hypotesen $H_0:\theta=\theta_0$ mot alternativet $H_1:\theta=\theta_1$ med samma signifikansnivå, beskriv vad som menas med att $A$ har högre styrka än $B$.
+
+* Konfidensintervall (definiera, exemplifiera)
+    + Definiera: Ett konfidensintervall för $\theta_0$ med konfidensgrad $(1-\alpha)$.
+
+* Score-, Wald- och Likelihood-kvot statistika (definiera, exemplifiera, tillämpa för konstruktion av test/konfidensintervall i enkla situationer)
+    + Bestäm likelihood-kvot statistikan för $H_0:\theta_0=1$ och testa hypotesen i fallet då $n=100$ och $\sum_{i=1}^n x_i=112$ på nivån $0.05$, du kan anta att asymptotiska resultat gäller med god noggrannhet.
+    + Bestäm ett 95%-igt Wald-intervall för $\theta_0$ då $n=100$ och $\sum_{i=1}^n x_i=112$.
+
+* Apriorifördelning, aposteriorifördelning (definiera, exemplifiera, bestämma aposteriorifördelning givet apriorifördelning och likelihood i enkla situationer).
+    + Bestäm aposteriorifördelningen givet Jeffreys apriorifördelning.
+
+* Konjugerande familj av apriorifördelningar (definiera, bestäma och verifiera givet modell)
+    + Definiera begreppet konjungerande familj av apriorifördelningar och visa att familjen av gamma-fördelningar utgör en sådan för den aktuella modellen.
+    
+* Jeffreys apriorifördelning (definiera, bestämma givet modell)
+
+
