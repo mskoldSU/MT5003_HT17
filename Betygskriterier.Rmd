@@ -1,0 +1,69 @@
+---
+title: " Lärandemål, betygskriterier och examination för kursen Statistisk inferensteori (MT5003), HT17."
+author: "Martin Sköld"
+date: "17 oktober 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Kursen behandlar grundläggande statistiska principer och teori från en såväl frekventistisk som Bayesiansk synvinkel. Som en del härav studeras bland annat likelihoodteori, tillräcklighet, information, asymptotik och Bootstrap tillämpat på metoder för punktskattning, intervallskattning och hypotestest. Implementering av härledda metoder i statistisk programvara utgör ett viktigt moment i kursen.
+
+## Lärandemål
+
+Efter att ha genomgått kursen förväntas studenten kunna: 
+
+1.	definiera begrepp och härleda resultat inom den statistiska inferensteorin
+
+2.	härleda likelihoodbaserade metoder för punktskattning, intervallskattning och hypotestest
+
+3.	härleda och tolka Bayesianska aposteriorifördelningar i enkla situationer
+
+4.	implementera metoder i statistisk programvara och tolka resultat
+
+Kursen examineras genom en laboration/inlämningsuppgift (1,5 hp, G/U, lärandemål 4) samt en skriftlig tentamen (5 hp, A-F, lärandemål 1-3).
+
+## Betygskriterier inlämningsuppgift:
+
+***
+
+**G** (Godkänt): Studenten kan självständigt implementera kursens grundläggande metoder i programpaketet R (eller motsvarande) givet datamaterial och enkla frågeställningar, kan skriftligen sammanfatta resultaten och dra huvudsakligen korrekta slutsatser av analysen inom givna tidsramar.
+
+**U** (Underkänt): Studenten uppfyller inte kriterierna för betyget G.
+
+***
+
+Inlämningsuppgiften består av tre delar med tillhörande deadline och löses individuellt. Varje deluppgift tilldelas ett av betygen G/Ux/U, för godkänt betyg på hela momentet krävs betyg G på samtliga deluppgifter. Vid betyg Ux ges en möjlighet till komplettering under kursens gång, vid betyg U alternativt missad deadline hänvisas till nästa examinationstillfälle.
+
+
+## Betygskriterier skriftlig tentamen
+
+***
+
+**A**: Studenten behärskar kursens begrepp och resultat, samt har god förmåga att lösa såväl standardproblem som mer avancerade problem relaterade till dessa.
+
+**B**: Studenten behärskar kursens flesta begrepp och resultat, samt har förmåga att lösa såväl standardproblem som mer avancerade problem relaterade till dessa.
+
+**C**: Studenten behärskar kursens flesta begrepp och resultat, kan lösa enkla standardproblem samt har viss förmåga att lösa mer avancerade problem relaterade till dessa.
+
+**D**: Studenten behärskar kursens mest centrala begrepp och resultat, kan lösa enkla standardproblem samt har viss förmåga att lösa mer avancerade problem relaterade till dessa.
+
+**E**: Studenten behärskar kursens mest centrala begrepp och resultat, samt kan lösa enkla standardproblem relaterade till dessa.
+
+**F**: Studenten uppfyller inte kriterierna för betyget E.
+
+***
+
+
+Skriftlig tentamen består av två delar. Den första behandlar centrala begrepp och resultat med relaterade standardproblem. Den andra behandlar problem som kan kräva att studenten behärskar en större del av kursmaterialet, har en förmåga att generalisera och använda flera metoder i samspel. Varje del består av tre uppgifter värda 10 poäng vardera. För godkänt betyg (A-E) krävs minst 20 poäng på den första delen. Den andra delen rättas endast för de studenter som uppnår godkänt betyg enligt ovan. Givet godkänt betyg bestämmer resultatet på den andra delen betyget enligt följande skala: 
+
+Betyg | Poäng
+------|------
+A | 25-30
+B | 19-24 
+C | 13-18 
+D | 7-12 
+E | 0-6
+

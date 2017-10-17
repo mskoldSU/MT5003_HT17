@@ -1,0 +1,35 @@
+---
+title: "Tryckfel i Held & Bové"
+author: "Martin Sköld"
+date: "17 december 2015"
+output: html_document
+---
+
+Följande tryckfelslista kompletterar författarnas errata på [bokens hemsida](http://www.biostat.uzh.ch/index.php?id=asi).
+
+* Sid 16, rad -3: Parameterrummet $\Theta$ borde inte bero på data $x$, givet data  $x$ är det förvisso denna del av $\Theta$ som innehåller $N$.
+
+* Sid 43, beviset av Result 2.3: Här används $h$ för olika saker, ekvationen längst ned på sidan skall vara
+$$
+\Lambda_{x_{1:n}}(\theta_1,\theta_2)=\frac{g_1(h(x_{1:n});\theta_1)g_2(x_{1:n})}{g_1(h(x_{1:n});\theta_2)g_2(x_{1:n})}=\frac{g_1(h(x_{1:n});\theta_1)}{g_1(h(x_{1:n});\theta_2)}
+$$
+
+* Sid 44, beviset av Result 2.4: Beviset fungerar endast i fallet då $X$ har en diskret fördelning.
+
+* Sid 56, Definition 3.5: Med '$V$ is a consistent estimator of $Var(T_n)$' måste författarna mena att
+$$
+\frac{V}{Var(T_n)}\overset{P}{\rightarrow} 1,
+$$
+då $n\rightarrow\infty$.
+
+* Sid 61, beviset av Result 3.1: I beviset skriver författarna 'Using the central limit theorem...' för att visa asymptotisk normalitet hos $T_n$. Detta fungerar om $T_n$ är en summa av oberoende likafördelade termer, i andra fall krävs ett längre resonemang.
+
+* Section 5.3-5.4: Inte fel, men här används $p$ och $q$ för att beteckna dimensionerna hos $\theta$ och $\eta$. I Section 5.5 används istället $q$ och $r$ för samma storheter.
+
+* Sid 133-134, beviset av Result 5.1: Den första raden, $g(\theta)=(\theta,\hat{\eta}(\theta))^T$ på sidan 134 har hamnat fel. Den hör inte ihop med ekvationerna under utan skall in efter 'and' längst ned på föregående sida. Ekvationerna därunder är en fortsättning på uttrycket för 
+$$
+\frac{\delta}{\delta\theta}h(g(\theta))
+$$
+längst ned på sidan 133. Det är för övrigt detta uttryck och inte $g(\theta)$ som är 0 (på rad tre i första stycket på sid 134).
+
+* Sid 226, (7.3) (även sid 228): Här kunde man förtydliga integrationsordningen genom att skriva $E_g(E_g(\log f(Y;\hat{\theta}(X_{1:n})|X_{1:n}))$.
