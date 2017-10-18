@@ -1,0 +1,145 @@
+---
+title: "Schema för Statistisk Inferensteori, HT17"
+author: "Martin Sköld"
+date: 'Senast ändrad `r format(Sys.time(), "%d %B, %Y")`'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo = FALSE}
+datum <- read.csv("datum.csv", header = FALSE, sep = ";")
+```
+
+
+***
+
+**`r datum[1,]`**
+
+*Introduktion. Statistiska modeller och likelihood.*  
+Litteratur: Kapitel 1, Kapitel 2-2.2.  
+Rekommenderade tal: (se "Att plotta likelihoodfunktioner i R" om du behöver hjälp med plottar).  2.6: 1, 2, 4. Ö: 4, 11, 12.  
+Data till 1d: `x <- c(1.5, 0.25, 3.75, 3.0, 2.5)`  
+Data till 2c: `x <- c(-0.560, -0.510, 1.304, 0.722, 0.490, 1.960, 1.441)`  
+
+
+***
+
+**`r datum[2,]`**
+
+*Score och information, Numeriska metoder, tillräcklighet.*  
+Litteratur: Kapitel 2.2-2.5. (ej 2.3.2)  
+Rekommenderade tal: 2.6: 5 (i 5c har score-ekvationen $S=0$ två lösningar, endast en ligger dock i parameterrummet). Ö: 1, 3.  
+
+***
+
+**`r datum[3,]`**
+
+*Tillräcklighet. Begrepp inom frekventistisk statistik.*  
+Litteratur: Kapitel 2.5, 3.1-2.  
+Rekommenderade tal: 2.6: 9, 6, 7, 8. Ö: 2a.  
+
+***
+
+**`r datum[4,]`**
+
+*Begrepp inom frekventistisk statistik, asymptotik. Bootstrap.*  
+Litteratur: Kapitel 3-3.2.5  
+Rekommenderade tal: 3.4: 2, 3, 5, 7, 8. Ö: 6.  
+
+***
+
+**`r datum[5,]`**
+
+*Tester och P-värden.*  
+Litteratur: Kapitel 3.3.  
+Rekommenderade tal: Ö: 7-8.  
+
+***
+
+**`r datum[6,]`**
+
+*Frekventistisk likelihoodteori: Metoder baserade på Score.*  
+Litteratur: Kapitel 4-4.2.  
+Rekommenderade tal: 4.7: 2, 5, 6a,b (bestäm även ett 95% score-intervall genom att plotta score-statistikan som funktion av $\pi$ och visuellt uppskatta gränserna ur figuren, data finns i 6f).  
+
+***
+
+**`r datum[7,]`**
+
+*Frekventistisk likelihoodteori: Wald och Likelihoodkvoter.*  
+Litteratur: Kapitel 4.2.  
+Rekommenderade tal: 4.7: 3, 6c-g, 7.  
+
+***
+
+**`r datum[8,]`**
+
+*Frekventistisk likelihoodteori.*  
+Litteratur:  Kapitel 4.4, 4.6.  
+Rekommenderade tal: [Tentamen 20160224](http://kurser.math.su.se/pluginfile.php/1460/mod_folder/content/0/20160224.pdf?forcedownload=1), 1bc, 3ab. [Tentamen 20160113](http://kurser.math.su.se/pluginfile.php/1460/mod_folder/content/0/20160113.pdf?forcedownload=1), 1bc, 3ab. [Tentamen 20150116](http://kurser.math.su.se/pluginfile.php/1460/mod_folder/content/0/20150116.pdf?forcedownload=1), 3cd.  
+
+***
+
+**`r datum[9,]`**
+
+*Likelihoodteori för flerdimensionella parameterrum.*  
+Litteratur: Kapitel 5.1-5.4  
+Rekommenderade tal: 5.7:1, 10, 12.  
+
+***
+
+**`r datum[10,]`**
+
+*Likelihoodteori för flerdimensionella parameterrum, Bayesiansk statistik.*  
+Litteratur: 5.4-5.5, 6.1-6.2.  
+Rekommenderade tal: 5.7: 13, 15 a-d (för specialfallet $K=2$).  
+Data till 5.7:13:  
+`x <- c(578,835,759,1940,1769,1030,2343,484,1803,1060,1096,3365,3470,256,443,2335,438,150,963,1584,2537,2174,1114,1023,1217,596,533,1781,2046,1367,48,2267,729,2052,1975,2763,1744,302,352,38,1335,2531,3039,1693,3337,1024,3382,1237,395,1275,1102,1665,2843,456,457,245,2593,522,1881,1189,1219,1825,2431,2570,586,1560,1927,1202,2429,1708,785,168,2046,963,535,2010,1159,2425,1528,1056,2212,1686,19,1816,2603,2183,1184,1919,9,341)`  
+`y <- c(3299,962,1436,769,335,191,4253,3912,193,251,743,3703,2500,2929,2529,630,1942,4108,1499,754,647,3906,2470,974,2857,3024,38,1268,421,688,96,3456,464,1554,1626,2024,1998,2063,574,797,3056,636,1500,3414,3247,616,2101,1555,1552,1649,1247,1219,947,201,799,144,425,2415,582,828,1292,1975,1260,932,2522,2744,9,2387,1522,2338,2384,2426,1408,804,287,379,500,167,651,586,2058,2254,2436,2495,1982,2209,1113,904,177,8,498,207,2114,2148)`  
+`delta <- c(1,1,1,1,1,1,1,1,0,0,0,1,0,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,1,1,0,1,0,0,1,1,0,1,1,0,1,0,0,0,0,1,0,0,1,1,1,1,0,0,1,0,1,0,1,0,1,1,0,0,0,1,1,0,0,1,0,1,1,1,1,1,0,1,1,0,1,1,0,1,0)`  
+`gamma <- c(0,0,0,0,1,1,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,1,1,0,0,1,0,0,1,1,0,0,1,1,0,1,0,1,1,0,1,0,1,0,1,0,0,1,0,1,1,0,0,0,0,0,1,0,0,0,1,0,1,1,1,0,0,0,1,1,1,1,1,1,0,1,1,1,0,0,0,1,0,1,0,1,1,1,0,0)`  
+
+
+***
+
+**`r datum[11,]`**
+
+*Bayesiansk statistik, val av prior och flerdimensionella parameterrum. MCMC.*  
+Litteratur: Kapitel 6.3, 6.5, 8.4.  
+Rekommenderade tal: 6.8: 1, 3 , 4, 8, 9. [Tentamen 20160224](http://kurser.math.su.se/pluginfile.php/1460/mod_folder/content/0/20160224.pdf?forcedownload=1), 2b. [Tentamen 20160113](http://kurser.math.su.se/pluginfile.php/1460/mod_folder/content/0/20160113.pdf?forcedownload=1), 2b. [Tentamen 20150116](http://kurser.math.su.se/pluginfile.php/1460/mod_folder/content/0/20150116.pdf?forcedownload=1), 2ab.  
+Data till 6.8:3: `x <- c(183, 173, 181, 170, 176, 180, 187, 176, 171, 190, 184, 173, 176, 179, 181, 186)`.  
+
+***
+
+**`r datum[12,]`**
+
+*Modellval*  
+Litteratur: Kapitel 7-7.1.  
+Rekommenderade tal: Ö: 10. 7.3: 2.  
+
+***
+
+**`r datum[13,]`**
+
+*Regularisering, krympning och utjämning.*  
+Litteratur:  
+Rekommenderade tal:  
+
+***
+
+**`r datum[14,]`**
+
+*Regularisering, krympning och utjämning.*  
+Litteratur:  
+Rekommenderade tal:  
+
+***
+
+**`r datum[15,]`**
+
+*Repetition.*
+
+

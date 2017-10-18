@@ -1,0 +1,26 @@
+---
+title: "Instruktion för redovisning"
+author: "Martin Sköld"
+output: html_document
+---
+### Ett självständigt arbete
+
+Uppgifterna skall lösas **självständigt**. Detta innebär att det är tillåtet att *diskutera* problem och lösningar med kurskamrater, medan **såväl programkod som rapporter skall vara egenhändigt författade**. Misstänkta fall av plagiat och otillåtet samarbete anmäls till universitetets disciplinnämnd. Om det råder tveksamheter om vad som är tillåtet fråga ansvarig lärare.
+
+### Hjälpmedel
+
+Syftet med inlämningsuppgifterna är att få träning i implementering av några av kursens metoder i statistisk programvara, inte att hitta snabbaste/enklaste vägen till ett numerisk resultat. Med undantag för paket nödvändiga för redovisningen (`rmarkdown` & co) skall därför endast funktionalitet tillgänglig i standardpaketen `base` och `stats` användas. Det är alltså inte tillåtet att använda specialfunktioner från paket som  t.ex. `boot`, `ProfileLikelihood` och `mcmc` för att lösa uppgifterna. Är du osäker på någon funktion/paket fråga ansvarig lärare.
+
+### Redovisning
+
+Redovisningen skall skrivas i R Markdown och kompileras till en .html-fil som lämnas in på kurshemsidan innan respektive deadline. Numeriska resultat skall genereras av kod som körs dynamiskt i dokumentet, inte klippas & klistras från "Console"-fönstret. Det är dock en god idé att utveckla och testa längre kodsnuttar i ett fristående script innan det överförs till Markdown-filen. Då huvudsakliga fokus ligger på koden, skall den redovisas i dokumentet (d.v.s. med `echo = TRUE` som är standardinställningen) och vara tydligt kommenterad. Följ gärna [Google's R Style Guide](https://google.github.io/styleguide/Rguide.xml) eller liknande för en mer lättläst kod.
+
+Ett minimalt exempel ges på 
+[MC.html](https://rawgit.com/mskoldSU/MT5003_HT17/master/MC.html) med tillhörande Markdown fil 
+[MC.Rmd](https://rawgit.com/mskoldSU/MT5003_HT17/master/MC.Rmd).
+
+### Inlämning och komplettering
+
+Uppgifter skall lämnas in före given deadline. Den som missar deadline hänvisas till nästa examinationstillfälle och en eventuellt annorlunda uppgift. I tid inlämnade uppgifter betygssätts på en skala G/Ux/U, där G är godkänd, Ux är underkänd med möjlighet till komplettering och U underkänd. Vid Ux ges möjlighet till komplettering som rättas inom kursperioden, vid U hänvisas till nästa examinationstillfälle och en eventuellt annorlunda uppgift.
+
+

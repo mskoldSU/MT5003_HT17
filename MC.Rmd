@@ -1,0 +1,31 @@
+---
+title: "Inlämningsuppgift: Monte-Carlo integration"
+author: "Martin Sköld"
+output: html_document
+---
+
+Uppgiften var att uppskatta integralen $I=\int_0^1\sin(1/t)\,dt$ med en Monte-Carlo metod. 
+
+Först observerar vi att om $U$ är likformigt fördelad över intervallet $[0,1]$ så är dess täthet $f_U(u)=1$ då $u\in[0,1]$, annars 0. Härur följer att $E(V)=E(g(U))=\int_0^1 g(u)\,du$, vi kan därför uppskatta denna integral genom att:
+
+1. Dra ett stort antal realiseringar $u_1,\ldots,u_N$ av $U$.
+2. Bestäm $v_i=g(u_i)$, $i=1,\ldots,N$.
+3. Uppskatta integralen med $I_N=N^{-1}\sum_{i=1}^N v_i$.
+
+Det följer då av stora talens lag att $I_N$ konvergerar i sannolikhet mot $E(V)=\int_0^1 g(u)\,du$ då $N\rightarrow\infty$. I R implementerar vi metoden som följer:
+
+```{r}
+N <- 100000 # Antal realiseringar
+u <- runif(N) # Steg 1
+v <- sin(1 / u) # Steg 2 för g(u)=sin(1/u)
+IN <- mean(v) # Steg 3
+IN
+```
+
+Vi kan illustrera konvergensen genom att plotta $I_n$ som funktion av $n$:
+
+```{r}
+In <- cumsum(v) / (1:N) # Bildar vektor av kumulativa medelvärden
+plot(In ,type = "l", ylim = c(.4, .6))
+```
+

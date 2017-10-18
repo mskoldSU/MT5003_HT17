@@ -1,0 +1,139 @@
+---
+title: "Att plotta funktioner i R, speciellt likelihoodfunktioner"
+author: "Martin Sköld"
+date: "12 oktober 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Här kommer vi se närmare på hur man kan plotta en funktion $f$ av en variabel $x$ över ett intervall $[a,b]$ i ett programpaket som R. Det vanligaste sättet är att först bestämma funktionens värden på en grid, dvs en sekvens värden $x_1,\ldots,x_n$ så att $a\leq x_1<\dots<x_n\leq b$ och sedan använda ett kommando som plottar en linjärt interpolerad version av $f$ genom att dra räta linjer mellan punkterna $(x_i,f(x_i))$ och $(x_{i+1}, f(x_{i+1}))$, $i=1,\ldots,n-1$. Här bestämmer $n$ upplösningen hos vår funktionsplot, lämpligt värde beror på hur slät funktionen $f$ är och vad vi ställer för några krav på grafiken. I R använder vi `plot` som vill ha vektorerna $x=(x_1,\dots,x_n)$ och $y=(f(x_1),\dots,f(x_n))$ som indata, samt information om typen av plott (punkter, linjer, ...).
+
+```{r}
+# Bestäm intervallgränser och antal punkter
+a <- 0
+b <- 2 * pi
+n <- 100
+# Skapa en vektor x med n tal jämnt fördelade mellan a och b
+x <- seq(a, b, length.out = n)
+# Bestäm vektorn y med funktionsvärden
+y <- numeric(n)
+for (i in 1:n){
+    y[i] <- sin(x[i])
+}
+# Plotta, type = "l" ger linjer
+plot(x, y, type = "l", main = "Funktionen y=sin(x)")
+```
+
+### Elementvisa beräkningar
+
+Konstruktionen av vektorn `y` ovan kan tyckas omständig. Är du van vid program som  R och Matlab vet du att samma vektor fås av instruktionen
+```{r}
+y <- sin(x)
+```
+Denna instruktion kan dock tyckas lite suspekt från ett rent matematiskt perspektiv, vad menar vi egentligen med $\sin(x_1,\dots,x_n)$? I R används i allmänhet *elementvis beräkning* då en funktion av *en* variabel ges en vektor som indata. Detta betyder att `sin(x)` ger vektorn $(\sin(x_1),\dots,\sin(x_n))$ som utdata, vilket är mycket praktiskt i många sammanhang och leder till mer lättläst kod (för den som känner till principen) än den mer omständiga varianten. Ur läsbarhetssynpunkt kan man eventuellt argumentera även för den omständigare `for`-loopen då principen fungerar i en mycket större familj av programspråk. Här föredrar vi dock den kompakta `sin(x)`.
+
+För en funktion av flera variabler gäller en liknande princip, om $f(x,y)=x+y^2$ så beräknas vektorn $(x_1+y_1^2, \dots, x_n+y_n^2)$ om vi ger vektorer $(x_1,\dots,x_n)$ och $(y_1,\dots,y_n)$ som indata:
+```{r}
+f <- function(x, y){x + y^2}
+x <- 1:4
+y <- 1:4
+f(x, y)
+```
+Vad händer om vektorerna har olika längd? De flesta programspråk skulle ge ett felmeddelande, men inte R:
+```{r}
+x <- 1
+f(x, y)
+```
+Här förlänger R den kortare vektorn genom upprepning tills den är lika lång som den längre, ovanstående är alltså ekvivalent med 
+```{r}
+x <- rep(1, 4)
+f(x, y)
+```
+Om längden av den kortare inte är en multipel av längden av den längre får vi dock en varning
+```{r}
+x <- 1:3
+f(x, y)
+```
+
+### Likelihoodfunktioner
+
+Antag nu att vi vill plotta en likelihood som beror på en reellvärd parameter $\theta$. Som indata vill vi ange parameterns värde $\theta$ och data $y$. I fallet med en vektor av oberoende observationer $y=(y_1,\ldots,y_n)$ blir likelihoodfunktionen en produkt, $L(\theta)=\prod_{i=1}^n f_i(y_i)$. Denna beräknar vi i allmänhet, för ett fixt $\theta$, i två steg:
+
+1. Skapa vektorn $f=(f_1(y_1),\ldots,f_n(y_n))$.
+2. Beräkna $L$ som produkten av elementen i $f$.
+
+I R:
+```{r}
+# Bestäm ett värde på theta och slumpa 100 exponentialvariabler
+theta <- 1
+y <- rexp(n = 100, rate = theta)
+# Konstruera funktion som beräknar L
+L <- function(theta, data){
+  # Beräknar likelihood för oberoende obs från exponentialfördelning
+  f <- dexp(data, rate = theta) # Steg 1
+  L.out <- prod(f) # Steg 2
+  return(L.out)
+}
+L(theta, y)
+```
+Funktionen fungerar om `y` är en vektor och `theta` skalär; i steg 1 utnyttjar vi nämligen elementvis beräkning av `dexp` i argumentet `y`. För att plotta funktionen vill vi dock att `L(theta, y)` skall ge vektorn $(L(\theta_1,y),\ldots, L(\theta_d,y))$ med indata $\theta=(\theta_1,\ldots,\theta_d)$, vi provar:
+```{r}
+theta <- c(1 / 2, 1, 2)
+L(theta, y)
+```
+vilket uppenbarligen blev fel, fundera över vad vektorn `f` i funktionen får för något värde då både `theta` och `y` är vektorer! Problemet ligger i att vi vill att funktionen `dexp` skall beräknas elementvis i argumentet `y` medan funktionen `L` skall beräknas elementvis i `theta`, vilket vi inte talat om för R. En lösning är att införa en slinga i `L`:
+
+```{r}
+L <- function(theta, data){
+    # Beräknar likelihood för oberoende obs från exponentialfördelning
+    d <- length(theta)
+    L.out <- numeric(d)
+    for (i in 1:d){
+        f <- dexp(data, rate = theta[i]) # Steg 1
+        L.out[i] <- prod(f) # Steg 2
+    }
+    return(L.out)
+}
+L(theta, y)
+```
+Här bestämmer vi vektorn `f` för ett värde på $\theta$ i taget. Vi kan även använda Rs `Vectorize`, som gör om en given funktion till en som beräknas elementvis i ett argument:
+
+```{r}
+L <- Vectorize( 
+  function(theta, data){
+    # Beräknar likelihood för oberoende obs från exponentialfördelning
+    f <- dexp(data, rate = theta) # Steg 1
+    L.out <- prod(f) # Steg 2
+    return(L.out)
+  },
+  vectorize.args = "theta")
+L(theta, y)
+```
+Vad som är att fördra beror på situationen. Att utnyttja Rs "specialfunktioner" och elementvisa beräkningar ger i allmänhet en snabb och kompakt kod. Med slingor blir koden långsammare och mer omständig, samtidigt som den eventuellt blir lättare att läsa för någon som är bättre På t.ex. Python än R.
+
+
+
+## Bivariata likelihoodfunktioner
+
+För att plotta en bivariat funktion $f(x,y)$ över en rektangel $[a,b]\times[c,d]$ med Rs `contour` behöver vi två sekvenser $a\leq x_1<\dots<x_n\leq b$ och $c\leq y_1<\dots<y_m\leq d$, samt funktionen bestämd i alla koordinatpar $(x_i, y_j)$, $i=1,\dots,n$, $j=1,\dots,m$. Den senare skall vara arrangerade i en $n\times m$-matris med $f(x_1,y_1)$ i nedre vänstra och $f(x_n,y_m)$ i övre högra och kan skapas med Rs `outer`. Vi illustrerar med likelihoodfunktionen för en Gamma-fördelning och data som ovan:
+```{r}
+alpha <- seq(0.5, 1.5, length.out = 100)
+beta <- seq(0.5, 1.5, length.out = 100)
+Lgamma <- Vectorize(
+  function(alpha, beta, data){
+    # Bestämmer likelihoodfunktion för Gamma-fördelning
+    f <- dgamma(data, alpha, beta)
+    L.out <- prod(f)
+    return(L.out)
+  }, vectorize.args = c("alpha", "beta"))
+L.matris <- outer(alpha, beta, FUN = Lgamma, data = y)
+contour(alpha, beta, L.matris,
+        xlab = expression(alpha),
+        ylab = expression(beta))
+```
+
+
