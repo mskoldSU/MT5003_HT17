@@ -9,8 +9,15 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, echo = FALSE}
-datum <- read.csv("datum.csv", header = FALSE, sep = ";")
+```{r, echo = FALSE, message=FALSE}
+library(jsonlite)
+library(tidyverse)
+
+# Byt https mot aktuellt schemalänk nedan
+datum <- unique(fromJSON("https://se.timeedit.net/web/su/db1/stud1/ri157XQQ563Z50Qv97093gZ6y6Y7801Q5Y65Y7.json", flatten = TRUE)$reservations) %>% 
+    mutate(veckodag = weekdays(as.Date(startdate))) %>% 
+    select(veckodag, startdate) %>% 
+    distinct()
 ```
 
 
@@ -20,7 +27,7 @@ datum <- read.csv("datum.csv", header = FALSE, sep = ";")
 
 *Introduktion. Statistiska modeller och likelihood.*  
 Litteratur: Kapitel 1, Kapitel 2-2.2.  
-Rekommenderade tal: (se "Att plotta likelihoodfunktioner i R" om du behöver hjälp med plottar).  2.6: 1, 2, 4. Ö: 4, 11, 12.  
+Rekommenderade tal: (se "[Att plotta likelihoodfunktioner i R](https://rawgit.com/mskoldSU/MT5003_HT17/master/Likelihood_plot.html)" om du behöver hjälp med plottar).  2.6: 1, 2, 4. Ö: 4, 11, 12.  
 Data till 1d: `x <- c(1.5, 0.25, 3.75, 3.0, 2.5)`  
 Data till 2c: `x <- c(-0.560, -0.510, 1.304, 0.722, 0.490, 1.960, 1.441)`  
 
