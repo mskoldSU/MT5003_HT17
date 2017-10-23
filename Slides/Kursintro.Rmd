@@ -1,6 +1,6 @@
 ---
 title: "Statistisk inferensteori <br> Kursinfo"
-author: "Martin SkÃ¶ld"
+author: "Martin Sköld"
 date: "6 november 2017"
 output:
   ioslides_presentation:
@@ -18,28 +18,28 @@ handout <- FALSE
 
 # Statistisk inferens
 <div class="white">
-*"induktiv vetenskap dÃ¤r man  drar slutsatser ur empiriska data under en osÃ¤kerhet orsakad av slumpmÃ¤ssighet i data."*
+*"induktiv vetenskap där man  drar slutsatser ur empiriska data under en osäkerhet orsakad av slumpmässighet i data."*
 
 -- Nationalencyklopedin
 </div>
 
 ## Statistisk inferensteori
 
-FrÃ¥gestÃ¤llningar:
+Frågeställningar:
 
-- hur uppskattar jag ett okÃ¤nt parametervÃ¤rde?
-- hur bestÃ¤mmer/uttrycker jag osÃ¤kerheten i dess vÃ¤rde?
-- hur avgÃ¶r jag om en modellfÃ¶renkling Ã¤r fÃ¶renlig med data?
-- hur vÃ¤ljer jag mellan olika modeller fÃ¶r data?
+- hur uppskattar jag ett okänt parametervärde?
+- hur bestämmer/uttrycker jag osäkerheten i dess värde?
+- hur avgör jag om en modellförenkling är förenlig med data?
+- hur väljer jag mellan olika modeller för data?
 
 ## Sannolikhetsteori vs inferensteori
 
 Antag $X\sim Bin(10,\theta_0)$.
 
-- Sannolikhetsteori: Om $\theta_0=1/3$, vad Ã¤r $P(X=4)$?\pause
-- Statistisk inferens: Om vi observerar $x=4$, vad kan vi sÃ¤ga om $\theta_0$?
+- Sannolikhetsteori: Om $\theta_0=1/3$, vad är $P(X=4)$?\pause
+- Statistisk inferens: Om vi observerar $x=4$, vad kan vi säga om $\theta_0$?
 
-Kan vi anvÃ¤nda sannolikhetsteoretiska begrepp fÃ¶r att uttala oss om osÃ¤kerheten? Varken $4$ eller $\theta_0$ Ã¤r ju stokastiska?
+Kan vi använda sannolikhetsteoretiska begrepp för att uttala oss om osäkerheten? Varken $4$ eller $\theta_0$ är ju stokastiska?
 
 ## Sannolikhetsfunktion och Likelihood
 ```{r, echo = FALSE}
@@ -56,55 +56,55 @@ plot(theta, dbinom(4, size = 10, theta), type = "l",
 ## Bayesian vs frekventist
 
 <div class="boxed">
-  **Frekventist:** Vi skattar $\theta_0$ med $\hat{\theta}(x)=x/n=2/5$, osÃ¤kerheten beskrivs av fÃ¶rdelningen hos $\hat{\theta}(X)$. Men denna beror pÃ¥ okÃ¤nda $\theta_0$?!
+  **Frekventist:** Vi skattar $\theta_0$ med $\hat{\theta}(x)=x/n=2/5$, osäkerheten beskrivs av fördelningen hos $\hat{\theta}(X)$. Men denna beror på okända $\theta_0$?!
 </div>
 
 <div class="boxed">
-  **Bayesian:**  Vi infÃ¶r en stokastisk variabel $\theta$ fÃ¶r att beskriva osÃ¤kerheten; apriorifÃ¶rdelningen $p_\theta(\cdot)$ beskriver osÃ¤kerheten fÃ¶re experimentet, denna uppdateras till aposteriorifÃ¶rdelningen $p_\theta(\cdot|x=4)$ efter vi observerat $x=4$. Men hur bestÃ¤mmer vi $p_\theta$?!
+  **Bayesian:**  Vi inför en stokastisk variabel $\theta$ för att beskriva osäkerheten; apriorifördelningen $p_\theta(\cdot)$ beskriver osäkerheten före experimentet, denna uppdateras till aposteriorifördelningen $p_\theta(\cdot|x=4)$ efter vi observerat $x=4$. Men hur bestämmer vi $p_\theta$?!
 </div>
 
 # Statistisk inferensteori, MT5003
 
-## FrÃ¥n kursplanen
+## Från kursplanen
 
-### Kursens innehÃ¥ll
+### Kursens innehåll
 
-Kursen behandlar grundlÃ¤ggande statistiska principer och teori frÃ¥n en sÃ¥vÃ¤l frekventistisk som Bayesiansk synvinkel. Som en del hÃ¤rav studeras bland annat likelihoodteori, tillrÃ¤cklighet, information, asymptotik och Bootstrap tillÃ¤mpat pÃ¥ metoder fÃ¶r punktskattning, intervallskattning och hypotestest. Implementering av hÃ¤rledda metoder i statistisk programvara utgÃ¶r ett viktigt moment i kursen.
+Kursen behandlar grundläggande statistiska principer och teori från en såväl frekventistisk som Bayesiansk synvinkel. Som en del härav studeras bland annat likelihoodteori, tillräcklighet, information, asymptotik och Bootstrap tillämpat på metoder för punktskattning, intervallskattning och hypotestest. Implementering av härledda metoder i statistisk programvara utgör ett viktigt moment i kursen.
 
-## FrÃ¥n kursplanen
+## Från kursplanen
 
-### FÃ¶rvÃ¤ntade studieresultat
+### Förväntade studieresultat
 
-*Efter att ha genomgÃ¥tt kursen fÃ¶rvÃ¤ntas studenten kunna:*
+*Efter att ha genomgått kursen förväntas studenten kunna:*
 
-1. definiera begrepp och hÃ¤rleda resultat inom den statistiska inferensteorin
-2. hÃ¤rleda likelihoodbaserade metoder fÃ¶r punktskattning, intervallskattning och hypotestest
-3. hÃ¤rleda och tolka Bayesianska aposteriorifÃ¶rdelningar i enkla situationer
+1. definiera begrepp och härleda resultat inom den statistiska inferensteorin
+2. härleda likelihoodbaserade metoder för punktskattning, intervallskattning och hypotestest
+3. härleda och tolka Bayesianska aposteriorifördelningar i enkla situationer
 4. implementera metoder i statistisk programvara och tolka resultat
 
 
 # Examination
 
 ## Skriftlig tentamen, 6 hp
-LÃ¤randemÃ¥l 1-3 examineras med skriftlig tentamen (9/1, omtentamen 21/2).
+Lärandemål 1-3 examineras med skriftlig tentamen (9/1, omtentamen 21/2).
 
-- TvÃ¥ delar, bas- och betygsdel.
-- PÃ¥ basdelen krÃ¤vs 20 av 30 poÃ¤ng. Garanterar minst E.
-- Vid godkÃ¤nt pÃ¥ basdelen rÃ¤ttas betygsdelen, betyg enligt tabell.
+- Två delar, bas- och betygsdel.
+- På basdelen krävs 20 av 30 poäng. Garanterar minst E.
+- Vid godkänt på basdelen rättas betygsdelen, betyg enligt tabell.
 
 A: 25-30, B: 19-24, C: 13:18, D: 7-12, E: 0-6.
 
-## InlÃ¤mningsuppgift, 1,5 hp
+## Inlämningsuppgift, 1,5 hp
 
-LÃ¤randemÃ¥l 4 examineras med inlÃ¤mningsuppgift.
+Lärandemål 4 examineras med inlämningsuppgift.
 
 - Tre delar med deadlines 17/11, 8/12 och 5/1.
-- Uppgifter inlÃ¤mnade i tid fÃ¥r feedback och mÃ¶jlighet till (en) komplettering under kursens gÃ¥ng. Sena inlÃ¤mningar och vidare kompletteringar tas emot i samband med omtentamen, dÃ¤refter hÃ¤nvisas till nÃ¤sta kursomgÃ¥ngs uppgifter.
+- Uppgifter inlämnade i tid får feedback och möjlighet till (en) komplettering under kursens gång. Sena inlämningar och vidare kompletteringar tas emot i samband med omtentamen, därefter hänvisas till nästa kursomgångs uppgifter.
 
 ## Rapporter
 
-- Skrivs **sjÃ¤lvstÃ¤ndigt**:
-    - Det Ã¤r tillÃ¥tet att diskutera lÃ¶sningar med kursare, programkod och rapport skriver du dock sjÃ¤lv.
-    - Det Ã¤r inte tillÃ¥tet att anvÃ¤nda andras material utan kÃ¤llhÃ¤nvisning, vare sig du fÃ¥tt det av kursare, Youtube eller annanstans. GÃ¤ller sÃ¥vÃ¤l text, bilder som programkod.
-- Skrivs i R Markdown med dynamisk R kod (inget klipp & klistrande av numeriska vÃ¤rden).
+- Skrivs **självständigt**:
+    - Det är tillåtet att diskutera lösningar med kursare, programkod och rapport skriver du dock själv.
+    - Det är inte tillåtet att använda andras material utan källhänvisning, vare sig du fått det av kursare, Youtube eller annanstans. Gäller såväl text, bilder som programkod.
+- Skrivs i R Markdown med dynamisk R kod (inget klipp & klistrande av numeriska värden).
 
