@@ -220,18 +220,21 @@ Hur kan vi prediktera volym givet radie och höjd?
 plot(träd)
 ```
  
-
 # Statistiska modeller
 
 <div class="columns-2">
 ```{r, out.width = "200px"}
-knitr::include_graphics("GeorgeEPBox.jpg")
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/a/a2/GeorgeEPBox.jpg")
 ```
+
 <div class="white">
+
+
 *Essentially all models are wrong, but some are useful.*
 
 -- George E. P. Box
 </div></div>
+
 
 ## Statistisk modell {.build}
 
@@ -484,11 +487,11 @@ plot(mu, L.exp(1 / mu, ac),
 ## Score och information
 
 <div class="boxed"> **Definition: ** (H & B, def 2.6, 5.1)
-Score-funktionen till en deriverbar likelihood-funktion $L$ av en variabel $\theta$ är log-likeliehoodfunktionens derivata
+Score-funktionen till en deriverbar likelihood-funktion $L$ av en variabel $\theta$ är log-likelihoodfunktionens derivata
 $$
     S(\theta)=\frac{d}{d\theta}\log L(\theta)=\frac{L'(\theta)}{L(\theta)}.
 $$
-Score-vektorn till en differentierbar likelihood-funktion av en vektorvärd parameter $\theta=(\theta_1,\ldots,\theta_d)$ är log-likeliehoodfunktionens gradient:
+Score-vektorn till en differentierbar likelihood-funktion av en vektorvärd parameter $\theta=(\theta_1,\ldots,\theta_d)$ är log-likelihoodfunktionens gradient:
 $$
     S(\theta)=\nabla\log L(\theta)=(\frac{d\log L(\theta)}{d\theta_1},\ldots,\frac{d\log L(\theta)}{d\theta_d}).
 $$
