@@ -208,7 +208,7 @@ X &lt;- model.matrix(Resultat ~ Alder + Kon + Utbildare,
 <p>En uppskattning av ML-skattarnas standardfel fås genom att ta kvadratroten av diagonalelementen i inversen av den observerade Fisherinformationsmatrisen <span class="math inline">\(I(\hat{\theta})\)</span> (se grå box i kursboken på sid 128, inversen av en matris <code>A</code> ges av <code>solve(A)</code>). Jämför denna uppskattning med de värden på <code>Std. Error</code> R anger i modellutskriften, verkar det som R använder denna metod?</p>
 <hr />
 <p><strong>Uppgift 4:</strong></p>
-<p>Uppskatta standardavvikelserna hos ML-skattarna av <span class="math inline">\(\theta\)</span> med parametrisk Bootstrap (utan att använda funktionalitet från paketet <code>boot</code>) och jämför med de som ges i föregående uppgift. Bilda även ett Bootstrap-baserat 95% konfidensintervall för sannolikheten att en privatist med din egen ålder och kön klarar en uppkörning.</p>
+<p>Uppskatta standardavvikelserna hos ML-skattarna av <span class="math inline">\(\theta\)</span> med parametrisk Bootstrap (se läroboken sid. 69 för skillnaden mellan parametrisk och icke-parametrisk bootstrap, du skall återsampla <span class="math inline">\(y\)</span>-vektorns värden för en fix matris <span class="math inline">\(X\)</span> av kovariater) och jämför med de som ges i föregående uppgift. Bilda även ett Bootstrap-baserat 95% konfidensintervall för sannolikheten att en privatist med din egen ålder och kön klarar en uppkörning. Funktionalitet från paketet <code>boot</code> skall inte användas i denna uppgift.</p>
 <hr />
 </div>
 

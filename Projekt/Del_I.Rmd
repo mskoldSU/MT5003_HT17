@@ -106,6 +106,6 @@ En uppskattning av ML-skattarnas standardfel fås genom att ta kvadratroten av di
 
 **Uppgift 4:**
 
-Uppskatta standardavvikelserna hos ML-skattarna av $\theta$ med parametrisk Bootstrap (utan att använda funktionalitet från paketet `boot`) och jämför med de som ges i föregående uppgift. Bilda även ett Bootstrap-baserat 95% konfidensintervall för sannolikheten att en privatist med din egen ålder och kön klarar en uppkörning.
+Uppskatta standardavvikelserna hos ML-skattarna av $\theta$ med parametrisk Bootstrap (se läroboken sid. 69 för skillnaden mellan parametrisk och icke-parametrisk bootstrap, du skall återsampla $y$-vektorns värden för en fix matris $X$ av kovariater) och jämför med de som ges i föregående uppgift. Bilda även ett Bootstrap-baserat 95% konfidensintervall för sannolikheten att en privatist med din egen ålder och kön klarar en uppkörning. Funktionalitet från paketet `boot` skall inte användas i denna uppgift.
 
 ---
