@@ -14,7 +14,7 @@ library(jsonlite)
 library(tidyverse)
 
 # Byt https mot aktuellt schemalänk nedan
-datum <- unique(fromJSON("https://se.timeedit.net/web/su/db1/stud1/ri157XQQ563Z50Qv97093gZ6y6Y7801Q5Y65Y7.json", flatten = TRUE)$reservations) %>% 
+datum <- unique(fromJSON("https://se.timeedit.net/web/su/db1/stud1/ri17X255X80Z06Q5Z96g6Y65y9016Y39603gQY5Q50763583Y3475Wn54%C3%A4KW675u7QWrl1boW3Z3qud3uuXaLWd7blK6Qa765X25xcWhV1W6j7pu8WtW%C3%A453LnW6WX575mp74YX5wjW55aBja06o3VW4YXXYWW1Ww586V78aw5xr128014o84WY63Y9joXXv8WcWI0oW45xV71o56o7WWo03YVYW3WVX596V.json", flatten = TRUE)$reservations) %>% 
     mutate(veckodag = weekdays(as.Date(startdate))) %>% 
     select(veckodag, startdate) %>% 
     distinct()
