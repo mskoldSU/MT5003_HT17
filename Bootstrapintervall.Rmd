@@ -1,0 +1,56 @@
+---
+title: "Konfidensintervall med Bootstrap"
+author: "Martin Sköld"
+date: "17 november 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(12)
+```
+
+Det finns många sätt att konstruera konfidensintervall med Bootstrap, här nöjer vi oss med de två enklaste.
+
+## Basic Boostrap
+
+"Basic Bootstrap"-intervallet bygger på att $g(x,\theta)=\hat{\theta}(x)-\theta$ är en approximativ pivå, d.v.s. dess fördelning är nästan oberoende av $\theta$ (åtminstone i en omgivning av det sanna värdet). Då kan vi använda Monte-Carlo för att approximera $a$ och $b$ så att $P_\hat{\theta}(a<\hat{\theta}(X)-\hat{\theta}(x)<b)=\gamma$, varur ett konfidensintervall fås som $(\hat{\theta}-b, \hat{\theta}-a)$. Utöver Monte-Carlo approximationen i bestämning av $a$ och $b$ gör vi även ett skattningsfel då $P_{\theta_0}(a<\hat{\theta}(X)-{\theta_0}<b)$ kan skilja sig något från $\gamma$ då $\hat{\theta}(x)-\theta$ inte är en exakt pivåvariabel.
+
+Bootstrap-proceduren blir som följer:
+
+- Dra $N$ stickprov $x_1^*, \ldots, x_N^*$ från $P_\hat{\theta}$.
+- Bestäm $\theta_i^*=\hat{\theta}(x_i^*)$ för varje stickprov $x_i^*$.
+- Bestäm $a$ och $b$ som de empiriska $(1-\gamma)/2$ och $(1+\gamma)/2$-kvantilerna hos $g_i=\theta_i^*-\hat{\theta}(x)$, $i=1,\ldots,N$.
+- Intervallet blir nu $(\hat{\theta}(x)-b,\hat{\theta}(x)-a)$.
+
+Som ett exempel, anta att vi observerar 31 lyckade försök av 100, och vill ha ett konfidensintervall för $\theta$ i $Bin(\10,\theta)$-fördelningen. I R konstruerar vi intervallet som följer:
+
+```{r}
+gamma = 0.95
+theta.hat <- 29/100
+# Dra 10000 stickprov från Bin(10,theta.hat)
+x.star <- rbinom(10000, size = 100, prob = theta.hat)
+theta.star <- x.star / 100
+g <- theta.star - theta.hat
+a <- quantile(g, probs = (1 - gamma) / 2, names = FALSE)
+b <- quantile(g, probs = (1 + gamma) / 2, names = FALSE)
+c(theta.hat - b, theta.hat -a)
+```
+Här är proceduren fram till bestämningen av `theta.star` specifik för problemet, resten generell.
+
+
+## Percentilintervall
+
+Ett percentilintervall skapas genom att vi direkt tar empiriska $(1-\gamma)/2$ och $(1+\gamma)/2$-kvantilerna hos våra simulerade $\theta_i^*$, $i=1,.\ldots,N$. Detta kan tyckas naturligt, men är vid närmare eftertanke lite bakvänt. I R givet ovanstående beräkningar:
+
+```{r}
+l <- quantile(theta.star, probs = (1 - gamma) / 2, names = FALSE)
+u <- quantile(theta.star, probs = (1 + gamma) / 2, names = FALSE)
+c(l, u)
+```
+
+I detta fall blev intervallen lika, så är i allmänhet inte fallet. Båda varianterna går bra att använda i inlämningsuppgiften.
+
+
+
+
