@@ -127,7 +127,7 @@ $(document).ready(function () {
 <p>Det finns många sätt att konstruera konfidensintervall med Bootstrap, här nöjer vi oss med de två enklaste.</p>
 <div id="basic-boostrap" class="section level2">
 <h2>Basic Boostrap</h2>
-<p>“Basic Bootstrap”-intervallet bygger på att <span class="math inline">\(g(x,\theta)=\hat{\theta}(x)-\theta\)</span> är en approximativ pivå, d.v.s. dess fördelning är nästan oberoende av <span class="math inline">\(\theta\)</span> (åtminstone i en omgivning av det sanna värdet). Då kan vi använda Monte-Carlo för att approximera <span class="math inline">\(a\)</span> och <span class="math inline">\(b\)</span> så att <span class="math inline">\(P_\hat{\theta}(a&lt;\hat{\theta}(X)-\hat{\theta}(x)&lt;b)=\gamma\)</span>, varur ett konfidensintervall fås som <span class="math inline">\((\hat{\theta}-b, \hat{\theta}-a)\)</span>. Utöver Monte-Carlo approximationen i bestämning av <span class="math inline">\(a\)</span> och <span class="math inline">\(b\)</span> gör vi även ett skattningsfel då <span class="math inline">\(P_{\theta_0}(a&lt;\hat{\theta}(X)-{\theta_0}&lt;b)\)</span> kan skilja sig något från <span class="math inline">\(\gamma\)</span> då <span class="math inline">\(\hat{\theta}(x)-\theta\)</span> inte är en exakt pivåvariabel.</p>
+<p>“Basic Bootstrap”-intervallet bygger på att <span class="math inline">\(g(x,\theta)=\hat{\theta}(x)-\theta\)</span> är en approximativ pivå, d.v.s. dess fördelning är nästan oberoende av <span class="math inline">\(\theta\)</span> (åtminstone i en omgivning av det sanna värdet). Då kan vi använda Monte-Carlo för att approximera <span class="math inline">\(a\)</span> och <span class="math inline">\(b\)</span> så att <span class="math inline">\(P_\hat{\theta}(a&lt;\hat{\theta}(X)-\hat{\theta}(x)&lt;b)=\gamma\)</span>, varur ett konfidensintervall löses ut som <span class="math inline">\((\hat{\theta}-b, \hat{\theta}-a)\)</span>. Utöver Monte-Carlo approximationen i bestämning av <span class="math inline">\(a\)</span> och <span class="math inline">\(b\)</span> gör vi även ett skattningsfel då <span class="math inline">\(P_{\theta_0}(a&lt;\hat{\theta}(X)-{\theta_0}&lt;b)\)</span> kan skilja sig något från <span class="math inline">\(\gamma\)</span> då <span class="math inline">\(\hat{\theta}(x)-\theta\)</span> inte är en exakt pivåvariabel.</p>
 <p>Bootstrap-proceduren blir som följer:</p>
 <ul>
 <li>Dra <span class="math inline">\(N\)</span> stickprov <span class="math inline">\(x_1^*, \ldots, x_N^*\)</span> från <span class="math inline">\(P_\hat{\theta}\)</span>.</li>
@@ -137,7 +137,7 @@ $(document).ready(function () {
 </ul>
 <p>Som ett exempel, anta att vi observerar 31 lyckade försök av 100, och vill ha ett konfidensintervall för <span class="math inline">\(\theta\)</span> i <span class="math inline">\(Bin(\10,\theta)\)</span>-fördelningen. I R konstruerar vi intervallet som följer:</p>
 <pre class="r"><code>gamma = 0.95
-theta.hat &lt;- 29/100
+theta.hat &lt;- 31/100
 # Dra 10000 stickprov från Bin(10,theta.hat)
 x.star &lt;- rbinom(10000, size = 100, prob = theta.hat)
 theta.star &lt;- x.star / 100
@@ -145,7 +145,7 @@ g &lt;- theta.star - theta.hat
 a &lt;- quantile(g, probs = (1 - gamma) / 2, names = FALSE)
 b &lt;- quantile(g, probs = (1 + gamma) / 2, names = FALSE)
 c(theta.hat - b, theta.hat -a)</code></pre>
-<pre><code>## [1] 0.20 0.38</code></pre>
+<pre><code>## [1] 0.22 0.40</code></pre>
 <p>Här är proceduren fram till bestämningen av <code>theta.star</code> specifik för problemet, resten generell.</p>
 </div>
 <div id="percentilintervall" class="section level2">
@@ -154,7 +154,7 @@ c(theta.hat - b, theta.hat -a)</code></pre>
 <pre class="r"><code>l &lt;- quantile(theta.star, probs = (1 - gamma) / 2, names = FALSE)
 u &lt;- quantile(theta.star, probs = (1 + gamma) / 2, names = FALSE)
 c(l, u)</code></pre>
-<pre><code>## [1] 0.20 0.38</code></pre>
+<pre><code>## [1] 0.22 0.40</code></pre>
 <p>I detta fall blev intervallen lika, så är i allmänhet inte fallet. Båda varianterna går bra att använda i inlämningsuppgiften.</p>
 </div>
 

@@ -14,7 +14,7 @@ Det finns många sätt att konstruera konfidensintervall med Bootstrap, här nöjer 
 
 ## Basic Boostrap
 
-"Basic Bootstrap"-intervallet bygger på att $g(x,\theta)=\hat{\theta}(x)-\theta$ är en approximativ pivå, d.v.s. dess fördelning är nästan oberoende av $\theta$ (åtminstone i en omgivning av det sanna värdet). Då kan vi använda Monte-Carlo för att approximera $a$ och $b$ så att $P_\hat{\theta}(a<\hat{\theta}(X)-\hat{\theta}(x)<b)=\gamma$, varur ett konfidensintervall fås som $(\hat{\theta}-b, \hat{\theta}-a)$. Utöver Monte-Carlo approximationen i bestämning av $a$ och $b$ gör vi även ett skattningsfel då $P_{\theta_0}(a<\hat{\theta}(X)-{\theta_0}<b)$ kan skilja sig något från $\gamma$ då $\hat{\theta}(x)-\theta$ inte är en exakt pivåvariabel.
+"Basic Bootstrap"-intervallet bygger på att $g(x,\theta)=\hat{\theta}(x)-\theta$ är en approximativ pivå, d.v.s. dess fördelning är nästan oberoende av $\theta$ (åtminstone i en omgivning av det sanna värdet). Då kan vi använda Monte-Carlo för att approximera $a$ och $b$ så att $P_\hat{\theta}(a<\hat{\theta}(X)-\hat{\theta}(x)<b)=\gamma$, varur ett konfidensintervall löses ut som $(\hat{\theta}-b, \hat{\theta}-a)$. Utöver Monte-Carlo approximationen i bestämning av $a$ och $b$ gör vi även ett skattningsfel då $P_{\theta_0}(a<\hat{\theta}(X)-{\theta_0}<b)$ kan skilja sig något från $\gamma$ då $\hat{\theta}(x)-\theta$ inte är en exakt pivåvariabel.
 
 Bootstrap-proceduren blir som följer:
 
@@ -27,7 +27,7 @@ Som ett exempel, anta att vi observerar 31 lyckade försök av 100, och vill ha et
 
 ```{r}
 gamma = 0.95
-theta.hat <- 29/100
+theta.hat <- 31/100
 # Dra 10000 stickprov från Bin(10,theta.hat)
 x.star <- rbinom(10000, size = 100, prob = theta.hat)
 theta.star <- x.star / 100
