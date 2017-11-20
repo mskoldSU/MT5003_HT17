@@ -34,7 +34,7 @@ för att läsa in koden.
 $$
 S(\theta)=X^T(y-p)\quad \text{och} \quad I(\theta)=X^TDX,
 $$
-där $y=(y_1,\ldots,y_N)^T$ är vår realisering av $Y$, $X$ en $N\times k$-matris med $x_i$ på rad $i$, $p=(p_1,\ldots,p_N)$ och slutligen $D$ en diagonalmatris med diagonal $v=(v_1,\ldots,v_N)^T$ där $v_i=p_i(1-p_i)$, $i=1, \ldots, n$.
+där $y=(y_1,\ldots,y_N)^T$ är vår realisering av $Y$, $X$ en $N\times k$-matris med $x_i$ på rad $i$, $p=(p_1,\ldots,p_N)^T$ och slutligen $D$ en diagonalmatris med diagonal $v=(v_1,\ldots,v_N)^T$ där $v_i=p_i(1-p_i)$, $i=1, \ldots, n$.
 
 
 Skriv funktioner `L <- function(theta, y, X){...}`, `l <- function(theta, y, X){...}`, `S <- function(theta, y, X){...}` och `I <- function(theta, y, X){...}` som bestämmer likelihood, log-likelihood, score och information för en logistisk regressionsmodell givet  värden på $\theta$, $y$ och $X$. Tänk på att matrismultiplikation i R anges med `%*%` som i `I <- t(X) %*% D %*% X`, vidare fås en diagonalmatris med diagonalen `x` genom `diag(as.vector(x))`. Det går bra att använda Rs `dbinom` i funktionerna `L` och `l`.
