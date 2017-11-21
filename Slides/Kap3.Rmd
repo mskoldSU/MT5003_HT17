@@ -368,7 +368,7 @@ knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/4/46/R._
 <div class="boxed"> **Definition:** Givet en statistisk modell $\mathcal{P}=\{P_\theta, \theta\in\Theta\}$ definieras en statistisk hypotes $H$ som en delmängd, $\Theta_0$, av parameterrummet. Om hypotesen innehåller en punkt i parameterrummet, $\Theta_0=\{\theta_0\}$, säges den vara enkel, annars sammansatt.
 </div>
 
-<div class="boxed"> **Definition:** En test-variabel $T$ är en stickprovsvariabel som mäter avvikelsen från en hypotes $H$. Det (ensidiga) $P$-värdet definieras som $P_{\theta_0}(T>t)$ för en enkel hypotes och  $\sup_{\{\theta\in\Theta_0\}} P_{\theta}(T>t)$ för en sammansatt.
+<div class="boxed"> **Definition:** En test-variabel $T$ är en stickprovsvariabel som mäter avvikelsen från en hypotes $H$. Det (ensidiga) $P$-värdet definieras som $P_{\theta_0}(T\geq t)$ för en enkel hypotes och  $\sup_{\{\theta\in\Theta_0\}} P_{\theta}(T\geq t)$ för en sammansatt.
 </div>
 
 ## Kvalitetskontroll
@@ -435,7 +435,7 @@ Testets styrkefunktion är $\beta(\theta)=P_{\theta}(X\in R)$.
 
 ## Tester och p-värden
 
-<div class="boxed"> **Hjälpsats:** Om $X$ har fördelningsfunktion $F$ så är $F(X)$ (och då även $1-F(X)$) likformigt fördelade på $[0,1]$.
+<div class="boxed"> **Hjälpsats:** Om $X$ har kontinuerlig fördelningsfunktion $F$ så är $F(X)$ (och då även $1-F(X)$) likformigt fördelade på $[0,1]$.
 </div>
 
 ## Livslängder
