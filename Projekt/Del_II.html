@@ -120,7 +120,8 @@ $(document).ready(function () {
 </div>
 
 
-<p>Vi kommer här fortsätta återskapa delar av Rs utskrift från den logistiska regressionsmodellen:</p>
+<p>Del II består av fyra deluppgifter. Inled svaret på varje uppgift genom att formulera frågeställningen med egna ord.</p>
+<p>Vi kommer här fortsätta återskapa delar av Rs utskrift från den logistiska regressionsmodellen.</p>
 <pre class="r"><code>load(&quot;proj_data.Rdata&quot;)
 modell &lt;- glm(Resultat ~ Alder + Kon + Utbildare, 
               data = data_individ,
@@ -190,7 +191,7 @@ profil &lt;- glm.fit(x = X[, -3], y = y,
 profil$coeff</code></pre>
 <pre><code>##          (Intercept)                Alder UtbildareTrafikskola 
 ##           -0.2703006           -0.0277291            1.2784497</code></pre>
-<p>som ger ML-skattningar hos övriga koefficienter då <span class="math inline">\(\theta_{Kon}=0.5\)</span> (som ett exempelvärde). Bestäm ett 95%-igt konfidensintervall baserat på profil-likelihooden visuellt ur figuren (jfr Figur 5.3b i läroboken) och jämför med motsvarande Wald-intervall.</p>
+<p>som ger ML-skattningar hos övriga koefficienter då <span class="math inline">\(\theta_{Kon}=0.5\)</span> (som ett exempelvärde). Bestäm ett 95%-igt konfidensintervall baserat på profil-likelihooden visuellt ur figuren genom att dra en horisontell linje på lämplig nivå (jfr Figur 5.3b i läroboken). Valet av nivå skall motiveras och intervallet jämföras med motsvarande Wald-intervall.</p>
 </div>
 
 

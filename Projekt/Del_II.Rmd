@@ -2,8 +2,9 @@
 title: "Del II: Score-, Wald- och likelihoodkvot-tester."
 output: html_document
 ---
+Del II består av fyra deluppgifter. Inled svaret på varje uppgift genom att formulera frågeställningen med egna ord.
 
-Vi kommer här fortsätta återskapa delar av Rs utskrift från den logistiska regressionsmodellen:
+Vi kommer här fortsätta återskapa delar av Rs utskrift från den logistiska regressionsmodellen.
 
 ```{r, echo = TRUE}
 load("proj_data.Rdata")
@@ -84,6 +85,6 @@ profil <- glm.fit(x = X[, -3], y = y,
                   family = binomial())
 profil$coeff
 ```
-som ger ML-skattningar hos övriga koefficienter då $\theta_{Kon}=0.5$ (som ett exempelvärde). Bestäm ett 95%-igt konfidensintervall baserat på profil-likelihooden visuellt ur figuren (jfr Figur 5.3b i läroboken) och jämför med motsvarande Wald-intervall.
+som ger ML-skattningar hos övriga koefficienter då $\theta_{Kon}=0.5$ (som ett exempelvärde). Bestäm ett 95%-igt konfidensintervall baserat på profil-likelihooden visuellt ur figuren genom att dra en horisontell linje  på lämplig nivå (jfr Figur 5.3b i läroboken). Valet av nivå skall motiveras och intervallet jämföras med motsvarande Wald-intervall.
 
 
