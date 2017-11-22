@@ -2,7 +2,7 @@
 title: "Del II: Score-, Wald- och likelihoodkvot-tester."
 output: html_document
 ---
-Del II består av fyra deluppgifter. Inled svaret på varje uppgift genom att formulera frågeställningen med egna ord.
+Del II består av fyra deluppgifter. Inled svaret på varje uppgift genom att formulera frågeställningen med egna ord och avsluta genom att kommentera eventuella slutsatser som kan dras av resultatet.
 
 Vi kommer här fortsätta återskapa delar av Rs utskrift från den logistiska regressionsmodellen.
 
