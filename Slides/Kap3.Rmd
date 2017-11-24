@@ -1,6 +1,6 @@
 ---
 title: "Statistisk inferensteori <br> Frekventistiska metoder <br> (H & B, Kapitel 3)"
-author: "Martin Sköld"
+author: "Martin SkÃ¶ld"
 date: "7 november 2016"
 output:
   ioslides_presentation:
@@ -14,11 +14,11 @@ knitr::opts_chunk$set(echo = FALSE)
 handout <- FALSE
 ```
 ```{r, echo = handout}
-# Data och förberedelse
+# Data och fÃ¶rberedelse
 
-set.seed(1) # För att kunna reproducera
+set.seed(1) # FÃ¶r att kunna reproducera
 
-# Luftkonditionering, tider mellan fel (från Cox, D.R. and Snell, E.J. (1981))
+# Luftkonditionering, tider mellan fel (frÃ¥n Cox, D.R. and Snell, E.J. (1981))
 ac <- c(90, 10, 60, 186, 61, 49, 14, 24, 56, 20, 79, 84, 44, 59, 29, 118, 25, 156, 310, 76, 26, 44, 23, 62, 130, 208, 70, 101)
 
 ```
@@ -26,15 +26,15 @@ ac <- c(90, 10, 60, 186, 61, 49, 14, 24, 56, 20, 79, 84, 44, 59, 29, 118, 25, 15
 ```{r, echo = handout}
 ## Funktioner
 
-# Täthet för invers Gammafördelning 
+# TÃ¤thet fÃ¶r invers GammafÃ¶rdelning 
 dinvgamma <- function(x, alpha, beta){
-        # Bestämmer täthet för invers Gamma-fördelning i punkten x
+        # BestÃ¤mmer tÃ¤thet fÃ¶r invers Gamma-fÃ¶rdelning i punkten x
         # Argument:
         #     x: funktionsargument
         #     alpha: formparameter
         #     beta: skalparameter
         # Utdata:
-        #     täthetens värde i x
+        #     tÃ¤thetens vÃ¤rde i x
         #
     (beta^alpha / gamma(alpha)) * x^(-alpha - 1) * exp(- beta / x)
 }
@@ -53,7 +53,7 @@ knitr::include_graphics("scale.jpg")
 
 ## Skattning och skattare
 
-<div class="boxed"> **Definition:** (Skattning/Skattare, H & B, def. 3.1) Antag att vi modellerar data $x$ som en realisering av en stokastisk variabel $X\sim P_{\theta_0}$. Med *skattning* syftar vi på ett numerisk värde $t=\hat{\theta}(x)$, med *skattare* syfter vi på funktionen $\hat{\theta}:\mathcal{T}\rightarrow\Theta$ alternativt den stokastiska variabeln $T=\hat{\theta}(X)$, $X\sim P_{\theta}$.
+<div class="boxed"> **Definition:** (Skattning/Skattare, H & B, def. 3.1) Antag att vi modellerar data $x$ som en realisering av en stokastisk variabel $X\sim P_{\theta_0}$. Med *skattning* syftar vi pÃ¥ ett numerisk vÃ¤rde $t=\hat{\theta}(x)$, med *skattare* syfter vi pÃ¥ funktionen $\hat{\theta}:\mathcal{T}\rightarrow\Theta$ alternativt den stokastiska variabeln $T=\hat{\theta}(X)$, $X\sim P_{\theta}$.
 </div>
 
 
@@ -68,32 +68,32 @@ knitr::include_graphics("varprec.png")
 
 ## Egenskaper hos skattare {.build}
 
-<div class="boxed"> **Definition:** (Medelkvadratfel, H & B (3.4)) En skattare $\hat{\theta}(\cdot)$:s medelkvadratfel är $$MSE(\theta)=E_\theta (\hat{\theta}(X)-\theta)^2=Var_\theta(\hat{\theta}(X))+(E_\theta[\hat{\theta}(X)-\theta])^2.$$
+<div class="boxed"> **Definition:** (Medelkvadratfel, H & B (3.4)) En skattare $\hat{\theta}(\cdot)$:s medelkvadratfel Ã¤r $$MSE(\theta)=E_\theta (\hat{\theta}(X)-\theta)^2=Var_\theta(\hat{\theta}(X))+(E_\theta[\hat{\theta}(X)-\theta])^2.$$
 </div>
 
-<div class="boxed"> **Definition:** (H & B, Def. 3.2) En skattare $\hat{\theta}(\cdot)$:s bias (väntevärdesfel, systematiska fel) är $$E_\theta(\hat{\theta}(X)-\theta).$$ Om $E_\theta(\hat{\theta}(X)-\theta)=0$ för alla $\theta\in\Theta$ säges $\hat{\theta}(\cdot)$ vara väntevärdesriktig (unbiased).
+<div class="boxed"> **Definition:** (H & B, Def. 3.2) En skattare $\hat{\theta}(\cdot)$:s bias (vÃ¤ntevÃ¤rdesfel, systematiska fel) Ã¤r $$E_\theta(\hat{\theta}(X)-\theta).$$ Om $E_\theta(\hat{\theta}(X)-\theta)=0$ fÃ¶r alla $\theta\in\Theta$ sÃ¤ges $\hat{\theta}(\cdot)$ vara vÃ¤ntevÃ¤rdesriktig (unbiased).
 </div>
 
-## Livslängder
+## LivslÃ¤ngder
 
-Om $X_1, \ldots X_n$ är oberoende $Exp(\theta)$ så är 
+Om $X_1, \ldots X_n$ Ã¤r oberoende $Exp(\theta)$ sÃ¥ Ã¤r 
 
 - $M=n^{-1}\sum_{i=1}^n X_i\sim Gamma(n,n\theta)$ och $\hat{\theta}(X)=1/M\sim InvGamma(n,n\theta)$ med 
-- väntevärde $E_\theta(\hat{\theta}(X))=n\theta/(n-1)$
+- vÃ¤ntevÃ¤rde $E_\theta(\hat{\theta}(X))=n\theta/(n-1)$
 - varians $Var_\theta(\hat{\theta}(X))=n^2\theta/((n-1)^2(n-2))$
 
-## Två problem: 
-Vi vill beskriva osäkerheten i en skattning $\hat{\theta}$ med hjälp av fördelningen hos $\hat{\theta}(X)$, $X\sim P_{\theta_0}$, men...
+## TvÃ¥ problem: 
+Vi vill beskriva osÃ¤kerheten i en skattning $\hat{\theta}$ med hjÃ¤lp av fÃ¶rdelningen hos $\hat{\theta}(X)$, $X\sim P_{\theta_0}$, men...
 
-- denna beror på okända $\theta_0$
-- även om vi vet $\theta_0$, är det endast möjligt att bestämma fördelningen analytiskt i enkla fall.
+- denna beror pÃ¥ okÃ¤nda $\theta_0$
+- Ã¤ven om vi vet $\theta_0$, Ã¤r det endast mÃ¶jligt att bestÃ¤mma fÃ¶rdelningen analytiskt i enkla fall.
 
 # Bootstrap
 
 ## Monte Carlo integrering
-Vi kan approximera ett väntevärde $m=E(g(X))$, $X\sim P$, med godtycklig noggrannhet genom att
+Vi kan approximera ett vÃ¤ntevÃ¤rde $m=E(g(X))$, $X\sim P$, med godtycklig noggrannhet genom att
 
-- Simulera $x_1,\ldots, x_N$ från $P$.
+- Simulera $x_1,\ldots, x_N$ frÃ¥n $P$.
 - Approximera $m$ med $\hat{m}=N^{-1}\sum_{i=1}^N g(x_i)$.
 
 ## Monte Carlo integrering
@@ -110,29 +110,29 @@ mean(sin(1 / x))
 ## Bootstrap (Plug-in + Monte Carlo)
 
 Vi vill skatta egenskap hos $P_{\theta_0}$, t.ex. $$\phi=h(\theta_0)=Var_{\theta_0}(\hat{\theta}(X)),$$
-men saknar såväl $\theta_0$ som användbart uttryck för $h(\theta)$.
+men saknar sÃ¥vÃ¤l $\theta_0$ som anvÃ¤ndbart uttryck fÃ¶r $h(\theta)$.
 
 ## Bootstrap (Plug-in + Monte Carlo)
 
 - **Plug-in:** Skatta $P_{\theta_0}$ med $P_{\hat{\theta}}$.
 - **Monte Carlo:** Approximera $h(\hat{\theta})$ genom att
-simulera $N$ nya stickprov $x_1^*,\ldots, x_N^*$, $x_i^*\in\mathcal{F}$, från $P_{\hat{\theta}}$ och använd dessa för att empiriskt approximera storheten av intresse.
+simulera $N$ nya stickprov $x_1^*,\ldots, x_N^*$, $x_i^*\in\mathcal{F}$, frÃ¥n $P_{\hat{\theta}}$ och anvÃ¤nd dessa fÃ¶r att empiriskt approximera storheten av intresse.
 
 ## Bootstrap (Plug-in + Monte Carlo)
 
-Med  $\phi=h(\theta_0)=Var_{\theta_0}(\hat{\theta}(X)),$ använder vi
+Med  $\phi=h(\theta_0)=Var_{\theta_0}(\hat{\theta}(X)),$ anvÃ¤nder vi
 $$
 \hat{\phi}=\frac{1}{N-1}\sum_{i=1}^N(\theta^*_i-\bar{\theta^*})^2\approx h(\hat{\theta}).
 $$
-där $\theta^*_i=\hat{\theta}(x_i^*)$.
+dÃ¤r $\theta^*_i=\hat{\theta}(x_i^*)$.
 
-## Bootstrap, livslängder
+## Bootstrap, livslÃ¤ngder
 
-Vad är fördelningen för $\hat{\theta}(X), X\sim P_\hat{\theta}$?
+Vad Ã¤r fÃ¶rdelningen fÃ¶r $\hat{\theta}(X), X\sim P_\hat{\theta}$?
 
 ```{r, echo=TRUE}
-# Dra N stickprov av storlek 28 från anpassad Exponentialfördelning
-# Bestämmer ML-skattning för varje stickprov och spara i theta.boot
+# Dra N stickprov av storlek 28 frÃ¥n anpassad ExponentialfÃ¶rdelning
+# BestÃ¤mmer ML-skattning fÃ¶r varje stickprov och spara i theta.boot
 theta.hat <- 1 / mean(ac)
 N <- 10000
 theta.boot <- numeric(10000)
@@ -142,13 +142,13 @@ for (i in 1:N){
 }
 ```
 
-## Bootstrap, livslängder
+## Bootstrap, livslÃ¤ngder
 ```{r, echo = TRUE}
 hist(theta.boot, xlab = expression(hat(theta)(X)))
 ```
 
 
-## Bootstrap, livslängder
+## Bootstrap, livslÃ¤ngder
 
 Bias
 
@@ -163,7 +163,7 @@ en numerisk approximation av
 theta.hat / 27
 ```
 
-## Bootstrap, livslängder
+## Bootstrap, livslÃ¤ngder
 
 Standardfel
 
@@ -179,11 +179,11 @@ en numerisk approximation av
 ```
 
 
-## Bootstrap, livslängder
+## Bootstrap, livslÃ¤ngder
 
-Låt $\phi_0=P_{\theta_0}(X_i>100)=\exp(-\theta_0 100)$. 
+LÃ¥t $\phi_0=P_{\theta_0}(X_i>100)=\exp(-\theta_0 100)$. 
 
-Plug-in skattning är $\hat{\phi}=P_{\hat{\theta}}(X_i>100)=\exp(-\hat{\theta} 100)$ med numeriskt standardfel
+Plug-in skattning Ã¤r $\hat{\phi}=P_{\hat{\theta}}(X_i>100)=\exp(-\hat{\theta} 100)$ med numeriskt standardfel
 ```{r, echo = TRUE}
 phi.boot <- exp(-theta.boot * 100)
 se.phi <- sd(phi.boot)
@@ -191,20 +191,20 @@ se.phi
 ```
 
 ## Icke-parametrisk Bootstrap
-Antag $x_1,\ldots, x_n$ är oberoende realiseringar av $X$ med fördelningsfunktion $F_0$.
+Antag $x_1,\ldots, x_n$ Ã¤r oberoende realiseringar av $X$ med fÃ¶rdelningsfunktion $F_0$.
 
-- Vi skattar $F_0$ med empiriska fördelningsfunktionen,
+- Vi skattar $F_0$ med empiriska fÃ¶rdelningsfunktionen,
 $$
 \hat{F}(\cdot)=\frac{1}{n}\sum_{i=1}^n \mathbf{1}\{x_i\leq \cdot\}
 $$
-- Ett stickprov från $\hat{F}$ fås genom dragning med återläggning från $\{x_1,\ldots,x_n\}$.
+- Ett stickprov frÃ¥n $\hat{F}$ fÃ¥s genom dragning med Ã¥terlÃ¤ggning frÃ¥n $\{x_1,\ldots,x_n\}$.
 - Upprepa...
 
-## Icke-parametrisk Bootstrap, Livslängder
+## Icke-parametrisk Bootstrap, LivslÃ¤ngder
 
 ```{r, echo = TRUE}
-# Drar N stickprov av storlek 28 från empirisk fördelning
-# Bestämmer skattning för varje stickprov och approximera standardfel
+# Drar N stickprov av storlek 28 frÃ¥n empirisk fÃ¶rdelning
+# BestÃ¤mmer skattning fÃ¶r varje stickprov och approximera standardfel
 N <- 10000
 theta.np.boot <- numeric(10000)
 for (i in 1:N){
@@ -220,52 +220,52 @@ se.np.theta
 ## Konvergens i sannolikhet {.build}
 
 <div class="boxed"> **Definition:** (Konvergens i sannolikhet, H & B A.4.1)
-En sekvens stokastiska variabler $T_n$, $n=1,\ldots$ konvergerar i sannolikhet mot $T$ om $P(|T_n-T|>\epsilon)\rightarrow 0$ då $n\rightarrow \infty$ för alla $\epsilon>0$.
+En sekvens stokastiska variabler $T_n$, $n=1,\ldots$ konvergerar i sannolikhet mot $T$ om $P(|T_n-T|>\epsilon)\rightarrow 0$ dÃ¥ $n\rightarrow \infty$ fÃ¶r alla $\epsilon>0$.
 </div>
 
-<div class="boxed"> **Definition:** (Konsistens, H & B Def. 3.4) En (sekvens) skattare $T_n=\hat{\theta}(X_{1:n})$, $n=1, \dots$, säges vara en konsistent (sekvens) skattare av $\theta$ om den konvergerar mot $\theta$ i sannolikhet då $n\rightarrow\infty$ för alla $\theta$. Den är vidare konsistent i medelkvadrat om $MSE(\theta)\rightarrow 0$ för alla $\theta$.
+<div class="boxed"> **Definition:** (Konsistens, H & B Def. 3.4) En (sekvens) skattare $T_n=\hat{\theta}(X_{1:n})$, $n=1, \dots$, sÃ¤ges vara en konsistent (sekvens) skattare av $\theta$ om den konvergerar mot $\theta$ i sannolikhet dÃ¥ $n\rightarrow\infty$ fÃ¶r alla $\theta$. Den Ã¤r vidare konsistent i medelkvadrat om $MSE(\theta)\rightarrow 0$ fÃ¶r alla $\theta$.
 </div>
 
 
 
 ## Stora talens lag {.build}
 
-<div class="boxed"> **Sats:** (Stora talens lag, H & B, A.4.3) Låt $X_1, \ldots, X_n$ vara oberoende likafördelade med $E(X_i)=\mu$. 
+<div class="boxed"> **Sats:** (Stora talens lag, H & B, A.4.3) LÃ¥t $X_1, \ldots, X_n$ vara oberoende likafÃ¶rdelade med $E(X_i)=\mu$. 
 
-Då konvergerar $T_n=n^{-1}\sum_{i=1}^n X_i$ mot $\mu$ i sannolikhet då $n\rightarrow \infty$.
+DÃ¥ konvergerar $T_n=n^{-1}\sum_{i=1}^n X_i$ mot $\mu$ i sannolikhet dÃ¥ $n\rightarrow \infty$.
 </div>
 
 <div class="boxed"> **Continuous mapping theorem:** (H & B, A.4.2)
-Om $T_n$ konvergerar i sannolikhet mot $T$ och $g$ är kontinuerlig så konvergerar $g(T_n)$ i sannolikhet mot $g(T)$.
+Om $T_n$ konvergerar i sannolikhet mot $T$ och $g$ Ã¤r kontinuerlig sÃ¥ konvergerar $g(T_n)$ i sannolikhet mot $g(T)$.
 </div>
 
-## Konvergens i fördelning
+## Konvergens i fÃ¶rdelning
 
-<div class="boxed"> **Definition:** (Konvergens i fördelning, H & B A.4.1)
-En sekvens stokastiska variabler $T_n$, $n=1,\ldots$ konvergerar i fördelning mot $T$ om 
-$F_n(t)=P(T_n\leq t)$ konvergerar mot $F(t)=P(T\leq t)$ för alla $t$ där $F$ är kontinuerlig.
+<div class="boxed"> **Definition:** (Konvergens i fÃ¶rdelning, H & B A.4.1)
+En sekvens stokastiska variabler $T_n$, $n=1,\ldots$ konvergerar i fÃ¶rdelning mot $T$ om 
+$F_n(t)=P(T_n\leq t)$ konvergerar mot $F(t)=P(T\leq t)$ fÃ¶r alla $t$ dÃ¤r $F$ Ã¤r kontinuerlig.
 </div>
 
-## Centrala gränsvärdessatsen och deltametoden {.build}
+## Centrala grÃ¤nsvÃ¤rdessatsen och deltametoden {.build}
 
-<div class="boxed"> **Sats:** (Centrala gränsvärdessatsen, H & B A.4.4) Låt $X_1, \ldots, X_n$ vara oberoende likafördelade med $E(X_i)=\mu$ och $Var(X_i)=\sigma^2$. 
+<div class="boxed"> **Sats:** (Centrala grÃ¤nsvÃ¤rdessatsen, H & B A.4.4) LÃ¥t $X_1, \ldots, X_n$ vara oberoende likafÃ¶rdelade med $E(X_i)=\mu$ och $Var(X_i)=\sigma^2$. 
 
-Då konvergerar $T_n=\sqrt{n}(n^{-1}\sum_{i=1}^n X_i-\mu)$ mot $T\sim N(0,\sigma^2)$ i fördelning då $n\rightarrow \infty$.
+DÃ¥ konvergerar $T_n=\sqrt{n}(n^{-1}\sum_{i=1}^n X_i-\mu)$ mot $T\sim N(0,\sigma^2)$ i fÃ¶rdelning dÃ¥ $n\rightarrow \infty$.
 </div>
 
 
-<div class="boxed"> **Sats:** (Deltametoden, H & B A.4.5) Antag att $\sqrt{n}(T_n-\theta)$ konvergerar i fördelning mot $N(0,\sigma^2)$ och låt $g$ vara en funktion sådan att $g'(\theta)\neq 0$.
+<div class="boxed"> **Sats:** (Deltametoden, H & B A.4.5) Antag att $\sqrt{n}(T_n-\theta)$ konvergerar i fÃ¶rdelning mot $N(0,\sigma^2)$ och lÃ¥t $g$ vara en funktion sÃ¥dan att $g'(\theta)\neq 0$.
 
-Då konvergerar $\sqrt{n}(g(T_n)-g(\theta))$ i fördelning mot $N(0,\sigma^2g'(\theta)^2)$.
+DÃ¥ konvergerar $\sqrt{n}(g(T_n)-g(\theta))$ i fÃ¶rdelning mot $N(0,\sigma^2g'(\theta)^2)$.
 </div>
 
 # Standardfel och konfidensintervall
 
 ## Standardfel
 
-H & B använder en generisk definition av begreppet standardfel:
+H & B anvÃ¤nder en generisk definition av begreppet standardfel:
 
-<div class="boxed"> **Definition:** (H & B, Def. 3.6) En skattning $\hat{\theta}$:s  standardfel är $se(\hat{\theta})=\sqrt{v_n}$, där $V_n$ är en konsistent skattare av $Var(T_n)$ i meningen att $V_n/Var(T_n)\rightarrow 1$  i sannolikhet då $n\rightarrow\infty$.
+<div class="boxed"> **Definition:** (H & B, Def. 3.6) En skattning $\hat{\theta}$:s  standardfel Ã¤r $se(\hat{\theta})=\sqrt{v_n}$, dÃ¤r $V_n$ Ã¤r en konsistent skattare av $Var(T_n)$ i meningen att $V_n/Var(T_n)\rightarrow 1$  i sannolikhet dÃ¥ $n\rightarrow\infty$.
 </div>
 
 
@@ -274,28 +274,28 @@ H & B använder en generisk definition av begreppet standardfel:
 
 <div class="boxed"> **Definition:** (H & B, Def. 3.6) 
 
-Låt $T_l=h_l(X)<h_u(X)=T_u$ vara två stickprovsvariabler. Om $P_\theta(T_l\leq\theta\leq T_u)=\gamma$ för alla $\theta$ och $x$ är en realisering av $X\sim P_{\theta_0}$ säges $(t_l,t_u)=(h_l(x),h_u(x))$ vara ett konfidensintervall för $\theta_0$ med konfidensgrad $\gamma$.
+LÃ¥t $T_l=h_l(X)<h_u(X)=T_u$ vara tvÃ¥ stickprovsvariabler. Om $P_\theta(T_l\leq\theta\leq T_u)=\gamma$ fÃ¶r alla $\theta$ och $x$ Ã¤r en realisering av $X\sim P_{\theta_0}$ sÃ¤ges $(t_l,t_u)=(h_l(x),h_u(x))$ vara ett konfidensintervall fÃ¶r $\theta_0$ med konfidensgrad $\gamma$.
 </div>
 
-Hur bestämmer vi $h_l$ och $h_u$ för ett givet $\gamma$?
+Hur bestÃ¤mmer vi $h_l$ och $h_u$ fÃ¶r ett givet $\gamma$?
 
 ## Konfidensintervall
 
-Ett konfidensintervall är en *intervallskattning*. En *punktskattning* är då
+Ett konfidensintervall Ã¤r en *intervallskattning*. En *punktskattning* Ã¤r dÃ¥
 
-- en punkt (d.v.s. $\hat{\theta}$) som skattar någonting (t.ex. punkten $\theta_0$)?
+- en punkt (d.v.s. $\hat{\theta}$) som skattar nÃ¥gonting (t.ex. punkten $\theta_0$)?
 
-- någonting (t.ex. punkten $\hat{\theta}$) som skattar en punkt (d.v.s. $\theta_0$)?
+- nÃ¥gonting (t.ex. punkten $\hat{\theta}$) som skattar en punkt (d.v.s. $\theta_0$)?
 
-## Pivåvariabel
+## PivÃ¥variabel
 
 <div class="boxed"> **Definition:** (H & B, Def. 3.7)
-En pivåvariabel är en funktion $g(x, \theta)$ sådan att fördelningen för $g(X,\theta)$ inte beror på $\theta$ då $X\sim P_\theta$.
+En pivÃ¥variabel Ã¤r en funktion $g(x, \theta)$ sÃ¥dan att fÃ¶rdelningen fÃ¶r $g(X,\theta)$ inte beror pÃ¥ $\theta$ dÃ¥ $X\sim P_\theta$.
 
-En funktion $g_n(x_{1:n}, \theta)$ sådan att gränsfördelningen (då $n\rightarrow\infty$) för $g_n(X_{1:n},\theta)$ inte beror på $\theta$ är en approximativ/asymptotisk pivåvariabel.
+En funktion $g_n(x_{1:n}, \theta)$ sÃ¥dan att grÃ¤nsfÃ¶rdelningen (dÃ¥ $n\rightarrow\infty$) fÃ¶r $g_n(X_{1:n},\theta)$ inte beror pÃ¥ $\theta$ Ã¤r en approximativ/asymptotisk pivÃ¥variabel.
 </div>
 
-## Konfidensintervall, livslängder
+## Konfidensintervall, livslÃ¤ngder
 
 Ett 95%-igt intervall ges av
 ```{r, echo = TRUE}
@@ -306,18 +306,18 @@ C.1
 
 ## Wald-intervall
 
-Låt $T_n=\hat{\theta}(X_1,\ldots,X_n)$ vara konsistent och asymptotiskt normalfördelad så att
+LÃ¥t $T_n=\hat{\theta}(X_1,\ldots,X_n)$ vara konsistent och asymptotiskt normalfÃ¶rdelad sÃ¥ att
 $$
 \frac{T_n-\theta}{\sqrt{Var(T_n)}}\rightarrow N(0,1),
 $$
-i fördelning då $n\rightarrow\infty$, $X\sim P_\theta^n$. 
+i fÃ¶rdelning dÃ¥ $n\rightarrow\infty$, $X\sim P_\theta^n$. 
 
-Då ges ett Wald-intervall med approximativ konfidensgrad $\gamma$ av 
+DÃ¥ ges ett Wald-intervall med approximativ konfidensgrad $\gamma$ av 
 $$
 \hat{\theta}\pm z_{(1+\gamma)/2}\cdot se(\hat{\theta}).
 $$
 
-## Wald-intervall, livslängder
+## Wald-intervall, livslÃ¤ngder
 
 ```{r, echo = TRUE}
 se <- theta.hat / sqrt(28)
@@ -325,7 +325,7 @@ C.2 <- theta.hat + se * qnorm(c(0.025, 0.975))
 C.2
 ```
 
-## Transformerat Wald-intervall, livslängder
+## Transformerat Wald-intervall, livslÃ¤ngder
 
 ```{r, echo = TRUE}
 se <- 1 / sqrt(28)
@@ -334,7 +334,7 @@ C.3
 ```
 
 
-## Bootstrap-intervall, livslängder
+## Bootstrap-intervall, livslÃ¤ngder
 
 ```{r, echo = TRUE}
 delta <- theta.boot - theta.hat
@@ -363,12 +363,12 @@ knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/4/46/R._
 ```
 
 
-## Enkel och sammansatt hypotes, P-värde {.build}
+## Enkel och sammansatt hypotes, P-vÃ¤rde {.build}
 
-<div class="boxed"> **Definition:** Givet en statistisk modell $\mathcal{P}=\{P_\theta, \theta\in\Theta\}$ definieras en statistisk hypotes $H$ som en delmängd, $\Theta_0$, av parameterrummet. Om hypotesen innehåller en punkt i parameterrummet, $\Theta_0=\{\theta_0\}$, säges den vara enkel, annars sammansatt.
+<div class="boxed"> **Definition:** Givet en statistisk modell $\mathcal{P}=\{P_\theta, \theta\in\Theta\}$ definieras en statistisk hypotes $H$ som en delmÃ¤ngd, $\Theta_0$, av parameterrummet. Om hypotesen innehÃ¥ller en punkt i parameterrummet, $\Theta_0=\{\theta_0\}$, sÃ¤ges den vara enkel, annars sammansatt.
 </div>
 
-<div class="boxed"> **Definition:** En test-variabel $T$ är en stickprovsvariabel som mäter avvikelsen från en hypotes $H$. Det (ensidiga) $P$-värdet definieras som $P_{\theta_0}(T\geq t)$ för en enkel hypotes och  $\sup_{\{\theta\in\Theta_0\}} P_{\theta}(T\geq t)$ för en sammansatt.
+<div class="boxed"> **Definition:** En test-variabel $T$ Ã¤r en stickprovsvariabel som mÃ¤ter avvikelsen frÃ¥n en hypotes $H$. Det (ensidiga) $P$-vÃ¤rdet definieras som $P_{\theta_0}(T\geq t)$ fÃ¶r en enkel hypotes och  $\sup_{\{\theta\in\Theta_0\}} P_{\theta}(T\geq t)$ fÃ¶r en sammansatt.
 </div>
 
 ## Kvalitetskontroll
@@ -386,11 +386,11 @@ p <- 1 - pbinom(2, prob = 0.1, size = 50)
 p
 ```
 
-$P(X\geq 3)=P(X\leq 2)$ då $X\sim Bin(50, 0.1)$.
+$P(X\geq 3)=P(X\leq 2)$ dÃ¥ $X\sim Bin(50, 0.1)$.
 
-## Livslängder
+## LivslÃ¤ngder
 
-Histogram över simulerade $T = |1/\bar{X}-0.01|$ då $\theta=0.01$.
+Histogram Ã¶ver simulerade $T = |1/\bar{X}-0.01|$ dÃ¥ $\theta=0.01$.
 
 ```{r, echo = handout}
 T <- abs(1 / rgamma(100000, 28, 28 * 0.01) - 0.01)
@@ -398,7 +398,7 @@ hist(T, 100, main = "")
 ```
 
 
-## Livslängder
+## LivslÃ¤ngder
 
 
 ```{r, echo = TRUE}
@@ -407,7 +407,7 @@ p <- mean(T > t)
 p
 ```
 
-`t` är observerat värde medan `T` är vektor simulerade värden under $H_0$.
+`t` Ã¤r observerat vÃ¤rde medan `T` Ã¤r vektor simulerade vÃ¤rden under $H_0$.
 
 
 ## Neyman (1894-1981) och Pearson (1885-1981)
@@ -424,34 +424,34 @@ knitr::include_graphics("http://aprender-mat.info/history/photos/Pearson_Egon_2.
 
 ## Hypotestest
 
-<div class="boxed"> **Definition:** Ett hypotestest är en regel som avgör ifall observerade data $x$ är förenliga med en given hypotes $H_0$, noll-hypotesen. 
+<div class="boxed"> **Definition:** Ett hypotestest Ã¤r en regel som avgÃ¶r ifall observerade data $x$ Ã¤r fÃ¶renliga med en given hypotes $H_0$, noll-hypotesen. 
 
-Om $x\in R\subset \mathcal{T}$, där $R$ är testets förkastningsområde, förkastas noll-hypotesen till förmån för en alternativ hypotes $H_A$. 
+Om $x\in R\subset \mathcal{T}$, dÃ¤r $R$ Ã¤r testets fÃ¶rkastningsomrÃ¥de, fÃ¶rkastas noll-hypotesen till fÃ¶rmÃ¥n fÃ¶r en alternativ hypotes $H_A$. 
 
-Testet sägs ha signifikansnivå $\alpha$ om $\sup_{\{\theta\in\Theta_0\}} P_{\theta}(X\in R)\leq\alpha$. 
+Testet sÃ¤gs ha signifikansnivÃ¥ $\alpha$ om $\sup_{\{\theta\in\Theta_0\}} P_{\theta}(X\in R)\leq\alpha$. 
  
-Testets styrkefunktion är $\beta(\theta)=P_{\theta}(X\in R)$.
+Testets styrkefunktion Ã¤r $\beta(\theta)=P_{\theta}(X\in R)$.
 </div>
 
-## Tester och p-värden
+## Tester och p-vÃ¤rden
 
-<div class="boxed"> **Hjälpsats:** Om $X$ har kontinuerlig fördelningsfunktion $F$ så är $F(X)$ (och då även $1-F(X)$) likformigt fördelade på $[0,1]$.
+<div class="boxed"> **HjÃ¤lpsats:** Om $X$ har kontinuerlig fÃ¶rdelningsfunktion $F$ sÃ¥ Ã¤r $F(X)$ (och dÃ¥ Ã¤ven $1-F(X)$) likformigt fÃ¶rdelade pÃ¥ $[0,1]$.
 </div>
 
-## Livslängder
+## LivslÃ¤ngder
 
 ```{r, echo = TRUE}
 r <- quantile(T, 0.95)
 r
 ```
 
-`T` är simulerade värden under $H_0$, vi förkastar om observerat är större än `r`
+`T` Ã¤r simulerade vÃ¤rden under $H_0$, vi fÃ¶rkastar om observerat Ã¤r stÃ¶rre Ã¤n `r`
 
 ```{r, echo = TRUE}
 t > r
 ```
 
-## Livslängder
+## LivslÃ¤ngder
 
 Ekvivalent med att 
 
@@ -459,7 +459,7 @@ Ekvivalent med att
 p < 0.05
 ```
 
-## Livslängder, styrkefunktion
+## LivslÃ¤ngder, styrkefunktion
 
 $\beta(\theta)=P_\theta(X\in R)=P_\theta(T >$ `r r` $)$.
 
@@ -475,7 +475,7 @@ abline(h=0.05, lty=3)
 ```
 
 ## Kvalitetskontroll, styrka
-Förkasta då $x>r$ så att $P_{0.1}(X> r)=1-P_{0.1}(X\leq r)\leq 0.05$
+FÃ¶rkasta dÃ¥ $x>r$ sÃ¥ att $P_{0.1}(X> r)=1-P_{0.1}(X\leq r)\leq 0.05$
 ```{r, echo = TRUE}
 r <- qbinom(0.95, size = 50, prob = 0.1)
 1 - pbinom(r, size = 50, prob = 0.1)

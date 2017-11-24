@@ -1,6 +1,6 @@
 ---
 title: "Statistisk inferensteori <br> Frekventistisk likelihoodteori <br> (H & B, Kapitel 4)"
-author: "Martin Sköld"
+author: "Martin SkÃ¶ld"
 output:
   ioslides_presentation:
     logo: SU_logo_CMYK.png
@@ -14,11 +14,11 @@ knitr::opts_chunk$set(echo = FALSE)
 handout <- FALSE
 ```
 ```{r, echo = handout}
-# Data och förberedelse
+# Data och fÃ¶rberedelse
 
-set.seed(1) # För att kunna reproducera
+set.seed(1) # FÃ¶r att kunna reproducera
 
-# Luftkonditionering, tider mellan fel (från Cox, D.R. and Snell, E.J. (1981))
+# Luftkonditionering, tider mellan fel (frÃ¥n Cox, D.R. and Snell, E.J. (1981))
 ac <- c(90, 10, 60, 186, 61, 49, 14, 24, 56, 20, 79, 84, 44, 59, 29, 118, 25, 156, 310, 76, 26, 44, 23, 62, 130, 208, 70, 101)
 
 ```
@@ -27,56 +27,56 @@ ac <- c(90, 10, 60, 186, 61, 49, 14, 24, 56, 20, 79, 84, 44, 59, 29, 118, 25, 15
 ## Funktioner
 
 # Exponentiallikelihood
-L.exp <- Vectorize( # Möjliggör elementvis beräkning i theta
+L.exp <- Vectorize( # MÃ¶jliggÃ¶r elementvis berÃ¤kning i theta
   function(theta, data){
-    # Bestämmer likelihood givet en vektor observationer från Exponential(theta)
+    # BestÃ¤mmer likelihood givet en vektor observationer frÃ¥n Exponential(theta)
     # Argument:
-    #     theta: parametervärde intensitet (eventuellt vektor)
+    #     theta: parametervÃ¤rde intensitet (eventuellt vektor)
     #     data: observationsvektor
     # Utdata:
-    #     Likelihoodfunktionens värden i theta
+    #     Likelihoodfunktionens vÃ¤rden i theta
     #
     L.out <- prod(dexp(data, rate = theta))
     return(L.out)
   }
   , vectorize.args = "theta")
-l.exp <- Vectorize( # Möjliggör elementvis beräkning i theta
+l.exp <- Vectorize( # MÃ¶jliggÃ¶r elementvis berÃ¤kning i theta
   function(theta, data){
-    # Bestämmer log-likelihood givet en vektor observationer från Exponential(theta)
+    # BestÃ¤mmer log-likelihood givet en vektor observationer frÃ¥n Exponential(theta)
     # Argument:
-    #     theta: parametervärde intensitet (eventuellt vektor)
+    #     theta: parametervÃ¤rde intensitet (eventuellt vektor)
     #     data: observationsvektor
     # Utdata:
-    #     Log-ikelihoodfunktionens värden i theta
+    #     Log-ikelihoodfunktionens vÃ¤rden i theta
     #
     l.out <- sum(log(dexp(data, rate = theta)))
     return(l.out)
   }
   , vectorize.args = "theta")
-# Score-funktion för exponentiallikelihood
+# Score-funktion fÃ¶r exponentiallikelihood
 S.exp <- Vectorize(
   function(theta, data){
-    # Bestämmer scorefunktion givet en vektor observationer från Exponential(theta)
+    # BestÃ¤mmer scorefunktion givet en vektor observationer frÃ¥n Exponential(theta)
     # Argument:
-    #     theta: parametervärde intensitet (eventuellt vektor)
+    #     theta: parametervÃ¤rde intensitet (eventuellt vektor)
     #     data: observationsvektor
     # Utdata:
-    #     Scorefunktionens värden i theta
+    #     Scorefunktionens vÃ¤rden i theta
     #
     n <- length(data)
     S.out <- n / theta - sum(data)
     return(S.out)
   }
   , vectorize.args = "theta")
-# Fisherinformation för exponentiallikelihood
+# Fisherinformation fÃ¶r exponentiallikelihood
 I.exp <- Vectorize(
   function(theta, data){
-    # Bestämmer Fisherinformation givet en vektor observationer från Exponential(theta)
+    # BestÃ¤mmer Fisherinformation givet en vektor observationer frÃ¥n Exponential(theta)
     # Argument:
-    #     theta: parametervärde intensitet (eventuellt vektor)
+    #     theta: parametervÃ¤rde intensitet (eventuellt vektor)
     #     data: observationsvektor
     # Utdata:
-    #     Fisherinformationens värden i theta
+    #     Fisherinformationens vÃ¤rden i theta
     #
     n <- length(data)
     I.out <- n / theta^2
@@ -92,31 +92,31 @@ I.exp <- Vectorize(
 ## Fishers regularitetsvillkor
 
 <div class="boxed">
-**Definition:** (H & B, def. 4.1). En statistisk modell $\mathcal{P}$ säges uppfylla Fishers regularitetsvillkor om:
+**Definition:** (H & B, def. 4.1). En statistisk modell $\mathcal{P}$ sÃ¤ges uppfylla Fishers regularitetsvillkor om:
 
-- $\Theta$ är ett öppet intervall,
-- stödet hos $x\mapsto p(x|\theta)$ beror inte på $\theta$,
+- $\Theta$ Ã¤r ett Ã¶ppet intervall,
+- stÃ¶det hos $x\mapsto p(x|\theta)$ beror inte pÃ¥ $\theta$,
 - $\theta_1\neq \theta_2\Rightarrow$ $p(\cdot|\theta_1)\neq p(\cdot|\theta_2)$ (identifierbarhet)
-- $L(\theta)$ är två gånger kontinuerligt differentierbar för alla $x\in\mathcal{T}$,
-- $\frac{d^2}{d\theta^2}\int p(x|\theta)\,dx=\int \frac{d^2}{d\theta^2}p(x|\theta)\,dx$ för alla 
+- $L(\theta)$ Ã¤r tvÃ¥ gÃ¥nger kontinuerligt differentierbar fÃ¶r alla $x\in\mathcal{T}$,
+- $\frac{d^2}{d\theta^2}\int p(x|\theta)\,dx=\int \frac{d^2}{d\theta^2}p(x|\theta)\,dx$ fÃ¶r alla 
   $\theta\in\Theta$.
   
 </div>
 
-## Förväntad Fisherinformation
+## FÃ¶rvÃ¤ntad Fisherinformation
 
 <div class="boxed">
-**Definition:** (H & B, def. 4.2). De förväntade Fisherinformationen hos en modell $\mathcal{P}$ är
+**Definition:** (H & B, def. 4.2). De fÃ¶rvÃ¤ntade Fisherinformationen hos en modell $\mathcal{P}$ Ã¤r
 $$
 J(\theta)=E_\theta(I(\theta;X)), \theta\in\Theta,
 $$
-där $I(\theta;x)$ är Fisherinformationen givet ett observerat stickprov $x$.
+dÃ¤r $I(\theta;x)$ Ã¤r Fisherinformationen givet ett observerat stickprov $x$.
 </div>
 
 ## Egenskaper hos scorefunktion
 
 <div class="boxed">
-**Sats:** (H & B, result 4.1). Under Fishers regularitetsvillkor gäller att
+**Sats:** (H & B, result 4.1). Under Fishers regularitetsvillkor gÃ¤ller att
 $$
 E_\theta(S(\theta;X))=0, \theta\in\Theta,
 $$
@@ -124,13 +124,13 @@ och
 $$
 Var_\theta(S(\theta;X))=J(\theta), \theta\in\Theta,
 $$
-där $S(\theta;x)$ är scorefunktionen givet ett observerat stickprov $x$.
+dÃ¤r $S(\theta;x)$ Ã¤r scorefunktionen givet ett observerat stickprov $x$.
 </div>
 
 ## Scorestatistikan
 
 <div class="boxed">
-**Sats:** Låt $X_{1:n}=(X_1,\ldots,X_n)\sim P_\theta^n$ vara en sekvens oberoende likafördelade stokastiska variabler. Då gäller under Fishers regularitetsvillkor att
+**Sats:** LÃ¥t $X_{1:n}=(X_1,\ldots,X_n)\sim P_\theta^n$ vara en sekvens oberoende likafÃ¶rdelade stokastiska variabler. DÃ¥ gÃ¤ller under Fishers regularitetsvillkor att
 $$
 \frac{S(\theta; X_{1:n})^2}{J(\theta)}\rightarrow Z\sim \chi^2(1)
 $$
@@ -138,12 +138,12 @@ $$
 $$
 \frac{S(\theta; X_{1:n})^2}{I(\theta; X_{1:n})}\rightarrow Z\sim \chi^2(1)
 $$
-med konvergens i fördelning då $n\rightarrow\infty$.
+med konvergens i fÃ¶rdelning dÃ¥ $n\rightarrow\infty$.
 </div>
 
 # ML-skattarens asymptotik
 
-## Harald Cramér (1893-1985)
+## Harald CramÃ©r (1893-1985)
 
 <div class="columns-2">
 ```{r, out.width = "300px"}
@@ -155,44 +155,44 @@ knitr::include_graphics("https://pictures.abebooks.com/LELIVRE/md/md16512436100.
 ```
 </div>
 
-## Cramér-Raos olikhet (informationsolikheten)
+## CramÃ©r-Raos olikhet (informationsolikheten)
 
 <div class="boxed">
-**Sats:** (H & B, result 4.8) Låt $T=h(X)$, $X\sim P_\theta$, vara en väntevärdesriktig skatttare av $\theta$. Då gäller under Fishers regularitetsvillkor att
+**Sats:** (H & B, result 4.8) LÃ¥t $T=h(X)$, $X\sim P_\theta$, vara en vÃ¤ntevÃ¤rdesriktig skatttare av $\theta$. DÃ¥ gÃ¤ller under Fishers regularitetsvillkor att
 $$
 Var_\theta(T)\geq \frac{1}{J(\theta)}.
 $$
 </div>
 
 <div class="boxed">
-**Definition:** En sekvens skattare, $T_n$, säges vara effektiv om
+**Definition:** En sekvens skattare, $T_n$, sÃ¤ges vara effektiv om
 $$
 \sqrt{J_n(\theta)}(T_n-\theta)\rightarrow Z\sim N(0,1)
 $$
-i fördelning då $n\rightarrow\infty$.
+i fÃ¶rdelning dÃ¥ $n\rightarrow\infty$.
 </div>
 
-## ML-skattarens asymptotiska fördelning
+## ML-skattarens asymptotiska fÃ¶rdelning
 
 <div class="boxed">
-**Sats:** (H & B, result 4.10) Låt $\hat{\theta}_n$ vara en konsistent sekvens av ML-skattare av $\theta$. Då gäller under Fishers regularitetsvillkor att
+**Sats:** (H & B, result 4.10) LÃ¥t $\hat{\theta}_n$ vara en konsistent sekvens av ML-skattare av $\theta$. DÃ¥ gÃ¤ller under Fishers regularitetsvillkor att
 $$
 \sqrt{J_n(\theta)}(\hat{\theta}_n-\theta)\rightarrow Z\sim N(0,1),
 $$
-d.v.s. ML-skattaren är effektiv.
+d.v.s. ML-skattaren Ã¤r effektiv.
 </div>
 
 ## Likelihood-kvot statistikan
 
 <div class="boxed">
-**Definition:** Likelihood-kvot statistikan är
+**Definition:** Likelihood-kvot statistikan Ã¤r
 $$
 T_L(\theta)=-2\tilde{l}(\theta)=-2(l(\theta)-l(\hat{\theta}))
 $$
-med en asymptotisk $\chi^2(1)$-fördelning då $X_{1:n}\sim P_\theta^n$.
+med en asymptotisk $\chi^2(1)$-fÃ¶rdelning dÃ¥ $X_{1:n}\sim P_\theta^n$.
 </div>
 
-## Livslängder: Wald och Likelihood-kvot statistikan
+## LivslÃ¤ngder: Wald och Likelihood-kvot statistikan
 
 ```{r, echo = handout}
 theta <- seq(0, 0.03, length.out = 1000)
@@ -208,7 +208,7 @@ text(x = .009, y = 6, labels = expression(T[L](theta)))
 ```
 
 
-## Livslängder: Konfidensintervall med Score-statistikan
+## LivslÃ¤ngder: Konfidensintervall med Score-statistikan
 
 ```{r, echo=handout}
 plot(theta, S.exp(theta, ac) / sqrt(I.exp(theta, ac)), type = "l", lwd = 2,
@@ -219,7 +219,7 @@ abline(h = qnorm(c((gamma+1)/2, (1-gamma)/2)), lty = 3)
 
 ```
 
-## Livslängder: Konfidensintervall med Likelihood-kvot statistikan
+## LivslÃ¤ngder: Konfidensintervall med Likelihood-kvot statistikan
 
 ```{r, echo = handout}
 theta.hat <- 1 / mean(ac)
@@ -234,7 +234,7 @@ plot(theta, L.exp(theta, ac) / L.exp(theta.hat, ac),  lwd = 2, type = "l",
 abline(h = exp(-qchisq(gamma, df = 1) / 2), lty = 3)
 ```
 
-## Livslängder: Konfidensintervall med Likelihood-kvot statistikan
+## LivslÃ¤ngder: Konfidensintervall med Likelihood-kvot statistikan
 ```{r, echo = TRUE}
 f <- function(theta, data){
   theta.hat <- 1 / mean(data)
@@ -263,7 +263,7 @@ TL <- -2 * (l.exp(theta0, ac) - l.exp(theta.hat, ac))
 ```
 
 
-## Jämförelse Wald, Score och Likelihood-kvot som test-statistikor
+## JÃ¤mfÃ¶relse Wald, Score och Likelihood-kvot som test-statistikor
 
 ```{r, echo = handout}
 theta0 <- 0.01
