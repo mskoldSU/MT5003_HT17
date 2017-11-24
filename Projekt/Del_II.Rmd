@@ -34,7 +34,7 @@ X <- model.matrix(Resultat ~ Alder + Kon + Utbildare,
 
 **Uppgift 1:**
 
-Verifiera att utskriftens `z value`-kolumn är Wald-statistikor, d.v.s. lärobokens (4.12), med hjälp av funktionerna `I` och `NR` från Del I.
+Verifiera att utskriftens `z value`-kolumn är Wald-statistikor (se läroboken sid. 128) med hjälp av funktionerna `I` och `NR` från Del I.
 
 ---
 
