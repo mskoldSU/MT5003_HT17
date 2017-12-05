@@ -1,0 +1,420 @@
+---
+title: "Statistisk inferensteori <br> Vektorvärda parametrar <br> (H & B, Kapitel 5)"
+author: "Martin Sköld"
+output:
+  ioslides_presentation:
+    logo: SU_logo_CMYK.png
+    incremental: no
+    css: slides.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+handout <- FALSE
+```
+```{r, echo = handout}
+# Data och förberedelse
+
+set.seed(1) # För att kunna reproducera
+
+# Luftkonditionering, tider mellan fel (från Cox, D.R. and Snell, E.J. (1981))
+ac <- c(90, 10, 60, 186, 61, 49, 14, 24, 56, 20, 79, 84, 44, 59, 29, 118, 25, 156, 310, 76, 26, 44, 23, 62, 130, 208, 70, 101)
+
+```
+
+```{r, echo = handout}
+## Funktioner
+
+# Weibull-likelihood
+L.weib <- Vectorize( # Möjliggör elementvis beräkning i (alpha, beta)
+  function(alpha, beta, data){
+    # Bestämmer likelihood givet en vektor observationer från Weibull(alpha, beta)
+    # Argument:
+    #     (alpha, beta): parametervärde (eventuellt vektorer)
+    #     data: observationsvektor
+    # Utdata:
+    #     Likelihoodfunktionens värden i (alpha, beta)
+    #
+    L.out <- prod(dweibull(data, shape = alpha, scale = 1 / beta))
+    return(L.out)
+  }
+  , vectorize.args = c("alpha", "beta"))
+l.weib <- Vectorize( # Möjliggör elementvis beräkning i theta
+  function(alpha, beta, data){
+    # Bestämmer loglikelihood givet en vektor observationer från Weibull(alpha, beta)
+    # Argument:
+    #     (alpha, beta): parametervärde (eventuellt vektorer)
+    #     data: observationsvektor
+    # Utdata:
+    #     loglikelihoodfunktionens värden i (alpha, beta)
+    #
+    l.out <- sum(log(dweibull(data, shape = alpha, scale = 1 / beta)))
+    return(l.out)
+  }
+  , vectorize.args = c("alpha", "beta"))
+# Score-vektor för Weibulllikelihood
+S.weib <- function(alpha, beta, data){
+    # Bestämmer scorevektor givet en vektor observationer från Weibull(alpha,beta)
+    # Argument:
+    #     (alpha,beta): parametervärden
+    #     data: observationsvektor
+    # Utdata:
+    #     Scorefunktionens värden i (alpha,beta)
+    #
+    S.out <- c(sum(1 / alpha+log(data * beta) * (1 - (data * beta)^alpha)),
+               alpha * sum(1 - (data * beta)^alpha) / beta)
+    return(S.out)
+}
+# Fisherinformation för Weibulllikelihood
+I.weib <- function(alpha, beta, data){
+    # Bestämmer informationsmatris givet en vektor observationer från Weibull(alpha,beta)
+    # Argument:
+    #     (alpha,beta): parametervärden
+    #     data: observationsvektor
+    # Utdata:
+    #     informationsmatrisens värden i (alpha,beta)
+    #
+    I11 <- sum(1 / alpha^2 + log(data * beta)^2 * (data * beta)^alpha)
+    I12 <- sum((data * beta)^alpha + alpha * log(data * beta) * (data * beta)^alpha - 1) / beta
+    I22 <- alpha * sum((alpha - 1) * (data * beta)^alpha + 1) / beta^2
+    I.out<-cbind(c(I11, I12), c(I12, I22))
+    return(I.out)}
+```
+
+
+# Likelihoodteori för vektorvärda parametrar
+
+## Scorevektor och informationsmatris
+
+<div class="boxed">
+**Definition:** (H & B, definition 5.1, 5.3)
+Score-vektorn till en differentierbar likelihood-funktion av en vektorvärd parameter $\theta=(\theta_1,\ldots,\theta_d)$ är log-likeliehoodfunktionens gradient:
+$$
+    S(\theta)=\nabla\log L(\theta)=(\frac{d\log L(\theta)}{d\theta_1},\ldots,\frac{d\log L(\theta)}{d\theta_d}).
+$$
+
+Fishers informationsmatris för en två gånger differentierbar likelihood-funktion av en vektorvärd parameter $\theta=(\theta_1,\ldots,\theta_d)$ är;
+$$
+I(\theta)=-H\log L(\theta)=-\bigl(\frac{d^2}{d\theta_i\,d\theta_j}\log L(\theta)\bigr). 
+$$
+
+</div>
+
+
+## Förväntad Fisherinformation och egenskaper hos Score
+
+<div class="boxed">
+**Definition:** (H & B, kap 5.4)
+Den förväntade Fisherinformationsmatrisen är
+$$
+J(\theta)=E_\theta(I(\theta))
+$$
+</div>
+
+<div class="boxed">
+**Sats:** (H & B, result 5.3) Under regularitetsvillkor är
+$$
+E_\theta(S(\theta))=0
+$$
+och
+$$
+Cov_\theta(S(\theta))=J(\theta).
+$$
+</div>
+
+## Multivariata CLT
+
+<div class="boxed">
+**Sats:**
+Om $X_i\in\mathbf{R}^p$, $i=1,\ldots,n$ är oberoende likafördelade vektorer med medelvärdesvektor $\mu$ och kovariansmatris $\Sigma$ (med ändliga element), då
+$$
+\sqrt{n}(\bar{X}-\mu)\rightarrow Z\sim N(0,\Sigma),
+$$
+i fördelning då $n\rightarrow\infty$.
+</div>
+
+<div class="boxed">
+**Sats:**
+Om $X=(X_1,\ldots,X_d) \sim N(\mu, \Sigma)$ så är
+$$
+(X-\mu)\Sigma^{-1/2}\sim N(0, I)
+$$
+ och
+$$
+(X-\mu)\Sigma^{-1}(X-\mu)^T\sim \chi^2(d).
+$$
+
+
+
+## Multivariata score-statistikan
+
+<div class="boxed">
+**Följdsats:**
+Låt $S(\theta)\in\mathbf{R}^d$ vara scorefunktionen baserad på oberoende likafördelade variabler $X_1,\ldots,X_n\sim P_\theta$, då
+$$
+\frac{1}{\sqrt{n}}S(\theta)\rightarrow Z\sim N(0,J_1(\theta)),
+$$
+$$
+S(\theta)J(\theta)^{-1/2}\rightarrow Z\sim N(0,I),
+$$
+och
+$$
+S(\theta)J(\theta)^{-1}S(\theta)^T\rightarrow Z \sim \chi^2(d)
+$$
+i fördelning då $n\rightarrow\infty$.
+</div>
+ 
+## Multivariat Taylor
+
+$$
+f(x)\approx f(x_0)+\nabla f(x_0)(x-x_0)^T+\frac{1}{2}(x-x_0)Hf(x_0)(x-x_0)^T
+$$
+$$
+\nabla f(x) \approx \nabla f(x_0) + (x-x_0)Hf(x_0)
+$$
+
+
+
+## Multivariata Wald-statistikan
+
+<div class="boxed">
+**Resultat:** Under regularitetsvillkor, om $\hat{\theta}\in\mathbf{R}^d$ är ML-skattaren baserad på oberoende likafördelade variabler $X_1,\ldots,X_n\sim P_\theta$, då
+
+$$
+\sqrt{n}(\hat{\theta}-\theta)\rightarrow Z \sim N(0, J_1(\theta)^{-1}),
+$$
+$$
+(\hat{\theta}-\theta)J(\theta)^{1/2}\rightarrow Z \sim N(0, I)
+$$
+och
+$$
+(\hat{\theta}-\theta)J(\theta)(\hat{\theta}-\theta)^T\rightarrow Z \sim \chi^2(d)
+$$
+i fördelning då $n\rightarrow\infty$.
+</div>
+
+## Multivariata likelihood-kvot statistikan
+
+<div class="boxed">
+**Resultat:** Under regularitetsvillkor, om $\hat{\theta}\in\mathbf{R}^d$ är ML-skattaren baserad på oberoende likafördelade variabler $X_1,\ldots,X_n\sim P_\theta$, då
+
+$$
+-2\tilde{l}(\theta)=-2(l(\theta)-l(\hat{\theta}))\rightarrow Z \sim \chi^2(d).
+$$
+i fördelning då $n\rightarrow\infty$.
+</div>
+
+## Livslängder, Weibullfördelning
+
+Täthetsfunktionen för den aktuella Weibullfördelningen är
+$$
+p(x_i|\alpha,\beta)=\alpha\beta(x_i\beta)^{\alpha-1}\exp(-(x_i\beta)^\alpha)
+$$
+med logaritm
+$$
+\log(p(x_i|\alpha,\beta))=\log(\alpha)+\alpha\log(\beta)+(\alpha-1)\log(x_i)-(x_i\beta)^\alpha
+$$
+vars gradient är
+$$
+(\frac{1}{\alpha}+\log(x_i\beta)(1-(x_i\beta)^\alpha),\quad\frac{\alpha}{\beta}(1-(x_i\beta)^{\alpha}))
+$$
+
+## Livslängder, Weibullfördelning
+
+Hessianen blir $$\begin{pmatrix}
+-\frac{1}{\alpha^2}-\log(x_i\beta)^2(x_i\beta)^{\alpha}& 
+-\frac{(x_i\beta)^{\alpha}+\alpha\log(x_i\beta)(x_i\beta)^{\alpha}-1}{\beta}\\
+-\frac{(x_i\beta)^{\alpha}+\alpha\log(x_i\beta)(x_i\beta)^{\alpha}-1}{\beta} & -\frac{\alpha}{\beta^2}((\alpha-1)(x_i\beta)^\alpha+1)
+\end{pmatrix}
+$$
+
+## Livslängder, Weibullfördelning
+
+```{r, echo = handout, warning=FALSE}
+alpha <- seq(0.8, 1.9, length.out = 100)
+beta <- seq(0.005, .02, length.out = 100)
+L.weib.mat <- outer(alpha, beta, FUN = L.weib, data = ac)
+target <- function(theta, data){
+    -l.weib(theta[1], theta[2], data)
+}
+theta.hat <- optim(c(1.1, 0.011), target, data = ac)$par
+contour(alpha, beta, L.weib.mat / L.weib(theta.hat[1], theta.hat[2], ac),
+        xlab = expression(alpha), ylab= expression(beta))
+abline(v=1, lty = 3)
+```
+
+## Livslängder, Weibullfördelning
+
+```{r, echo = handout, warning=FALSE}
+alpha <- seq(0.8, 1.9, length.out = 100)
+beta <- seq(0.005, .02, length.out = 100)
+l.weib.mat <- outer(alpha, beta, FUN = l.weib, data = ac)
+contour(alpha, beta, l.weib.mat - l.weib(theta.hat[1], theta.hat[2], ac),
+        xlab = expression(alpha), ylab= expression(beta),
+        levels = -50:1)
+abline(v=1, lty = 3)
+TW <- Vectorize(function(alpha, beta, data, theta.hat){
+  TW.out <- (theta.hat - c(alpha, beta)) %*% I.weib(theta.hat[1], theta.hat[2], ac) %*% cbind((theta.hat - c(alpha, beta)))
+  return(TW.out)
+}, vectorize.args = c("alpha", "beta"))
+TW.mat <- outer(alpha, beta, FUN = TW, data = ac, theta.hat = theta.hat)
+contour(alpha, beta, -TW.mat / 2, add = TRUE, lty = 3,
+        levels = -50:1)
+```
+
+
+## Konfidensregioner, Wald och likelihood
+
+```{r, echo = handout}
+contour(alpha, beta, -2*(l.weib.mat - l.weib(theta.hat[1], theta.hat[2], ac)),
+        xlab = expression(alpha), ylab= expression(beta),
+        levels = qchisq(0.95, 2))
+contour(alpha, beta, TW.mat, add = TRUE, lty = 3,
+        levels = qchisq(0.95, 2))
+```
+
+## Tester, $H_0:(\alpha, \beta)=(1,0.01)$
+
+```{r, echo = TRUE}
+a0 <- 1; b0 <- 0.01
+S <- S.weib(a0, b0, ac)
+I <- I.weib(a0, b0, ac)
+TS <- S %*% solve(I) %*% cbind(S)
+1 - pchisq(TS, 2)
+```
+
+
+```{r, echo = TRUE}
+d <- (theta.hat - c(a0, b0))
+TW <- d %*% I %*% cbind(d)
+1 - pchisq(TW, 2)
+```
+
+## Tester, $H_0:(\alpha, \beta)=(1,0.01)$
+
+```{r, echo = TRUE}
+TL <- -2 * (l.weib(a0, b0, ac) - l.weib(theta.hat[1], theta.hat[2], ac))
+1 - pchisq(TL, 2)
+```
+
+## Konfidensregioner, Wald och likelihood
+
+```{r, echo = handout}
+contour(alpha, beta, -2*(l.weib.mat - l.weib(theta.hat[1], theta.hat[2], ac)),
+        xlab = expression(alpha), ylab= expression(beta),
+        levels = qchisq(0.95, 2))
+contour(alpha, beta, TW.mat, add = TRUE, lty = 3,
+        levels = qchisq(0.95, 2))
+abline(v = 1, h = 0.01, lty = 2)
+```
+
+# Marginella metoder
+
+## Marginella Wald-intervall
+
+Om
+$$
+Cov(\hat{\theta}-\theta)\approx J(\theta)^{-1}
+$$
+så
+$$
+Var(\hat{\theta}_i-\theta_i)\approx diag(J(\theta)^{-1})_i
+$$
+och
+$$
+se(\hat{\theta}_i)=diag(I(\hat{\theta})^{-1})_i.
+$$
+
+## Marginella Wald-intervall
+```{r, echo =FALSE}
+alpha.hat <- theta.hat[1]
+beta.hat <- theta.hat[2]
+```
+
+
+```{r, echo = TRUE}
+se <- sqrt(diag(solve(I.weib(alpha.hat, beta.hat, ac))))
+se
+C.alpha <- alpha.hat + se[1] * qnorm(c(0.025, .975))
+C.alpha
+C.beta <- beta.hat + se[2] * qnorm(c(0.025, .975))
+C.beta
+
+```
+
+
+
+## Profil och skattad likelihood
+
+<div class="boxed">
+**Definition:** (H & B, definition 5.4, 5.5)
+
+Antag att parametervektorn kan delas in i en intresse-parameter $\theta$ och en skräp-parameter $\eta$, då ges den skattade likelihooden för $\theta$ av
+$$
+L_e(\theta)=L(\theta, \hat{\eta}),
+$$
+där $(\hat{\theta},\hat{\eta})$ är ML-skattningen av hela parametervektorn. Vidare ges profil-likelihooden av
+$$
+L_p(\theta)=\max_{\eta}L(\theta, \eta)=L(\theta, \hat{\eta}(\theta)).
+$$
+</div>
+
+## Livslängder, skattad och profil för $\beta$
+
+```{r, echo = handout, warnings = FALSE}
+eta.hat <- theta.hat[1]
+beta <- seq(0.005, 0.02, length.out = 100)
+plot(beta, L.weib(eta.hat, beta, data = ac) / L.weib(theta.hat[1], theta.hat[2], ac), type = "l",
+     xlab = expression(beta), ylab = "")
+eta.hat <- Vectorize(function(beta, data = ac){
+    optimize(L.weib, interval = c(0.2, 2), beta = beta, data = ac, maximum = TRUE)$maximum
+}, vectorize.args = "beta")
+lines(beta, L.weib(eta.hat(beta = beta, data = ac) , beta, data = ac) / L.weib(theta.hat[1], theta.hat[2], ac), lty = 2)
+```
+
+## Livslängder, skattad och profil för $\beta$
+
+```{r, echo = handout}
+contour(beta, alpha, t(L.weib.mat) / L.weib(theta.hat[1], theta.hat[2], ac),
+        xlab = expression(beta), ylab= expression(alpha), lty = 3)
+abline(h = theta.hat[1])
+lines(beta, eta.hat(beta = beta, data = ac), lty = 2)
+```
+
+## Profil-loglikelihoodens krökning
+
+<div class="boxed">
+**Resultat:** (H & B, Result 5.1) Låt $L(\theta,\eta)$ ha observerad Fisherinformation
+$$I(\hat{\theta},\hat{\eta})=
+\begin{pmatrix}
+I_{\theta\theta} & I_{\theta\eta}\\
+I_{\eta\theta} & I_{\eta\eta}
+\end{pmatrix}
+\text{ med invers }
+I(\hat{\theta},\hat{\eta})^{-1}=
+\begin{pmatrix}
+I^{\theta\theta} & I^{\theta\eta}\\
+I^{\eta\theta} & I^{\eta\eta}
+\end{pmatrix}
+$$
+då är profil-loglikelihoodens negativa krökning
+$$
+-H l_p(\hat{\theta})=(I^{\theta\theta})^{-1}
+$$
+och skattade loglikelihoodens negativa krökning
+$$
+- H l_e(\hat{\theta})=I_{\theta\theta}.
+$$
+</div>
+
+## Profil-loglikelihoodens krökning
+
+Ger kvadratiska approximationer
+$$
+-2(l_p(\theta)-l_p(\hat{\theta}))\approx (\hat{\theta}-\theta) (I^{\theta\theta})^{-1} (\hat{\theta}-\theta)^T\sim \chi^2(\dim(\theta))
+$$
+och 
+$$
+-2(l_e(\theta)-l_e(\hat{\theta}))\approx (\hat{\theta}-\theta) I_{\theta\theta} (\hat{\theta}-\theta)^T \sim ??.
+$$
+
