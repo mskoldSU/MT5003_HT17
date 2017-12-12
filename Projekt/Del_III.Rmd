@@ -16,7 +16,7 @@ modell <- glm(Resultat ~ Alder + Kon + Utbildare,
 summary(modell)
 ```
 
-```{r, echo = TRUE}
+```{r, echo = FALSE}
 y <- matrix(data_individ$Resultat, ncol = 1)
 X <- model.matrix(Resultat ~ Alder + Kon + Utbildare, 
                   data = data_individ)
