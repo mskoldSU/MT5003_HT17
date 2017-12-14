@@ -66,7 +66,7 @@ Använd algoritmen för att simulera (minst) 10000 vektorer $\boldsymbol{\theta}$ 
 
 * Plotta histogram över de marginella aposteriorifördelningarna (motsvarande [slide 24](https://rawgit.com/mskoldSU/MT5003_HT17/master/Slides/Kap6.html#24)).
 
-* Använd dragningarna för att approximera aposteriorimedelvärden och 95% kredibilitetsintervall (med hjälp av `quantile`) för de tre parametrarna. Jämför med motsvarande frekventistiska resultat (som kontroll borde resultaten inte skilja sig så mycket).
+* Använd dragningarna för att approximera aposteriorimedelvärden och 95% kredibilitetsintervall (med hjälp av `quantile`) för de fyra parametrarna. Jämför med motsvarande frekventistiska resultat (som kontroll borde resultaten inte skilja sig så mycket).
 
 * Låt $Y^{*}$ beteckna resultatet av en framtida uppkörning med kovariater $x^{*}$. Då gäller att $P(Y^{*}=1|y)=E(p(x^{*})|y)$. Använd detta för att approximera $P(Y^{*}=1|y)$ då $\tilde{x}$ motsvarar en privatist av ditt eget kön och ålder.
 

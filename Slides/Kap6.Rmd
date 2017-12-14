@@ -295,7 +295,7 @@ Upprepa för $i=1, ..., N$:
 
 - Låt $z^*=z_{i-1}+\epsilon_i$, $\epsilon_i\sim N(0,\sigma^2)$.
 
-- Om $f(z^*)/f(z_{i-1})> u_i$, $u_i\sim Likf[0,1]$ låt $z_i=z^*$, annars $z_i=z_{-1}$
+- Om $f(z^*)/f(z_{i-1})> u_i$, $u_i\sim Likf[0,1]$ låt $z_i=z^*$, annars $z_i=z_{i-1}$
 
 $z_1, ..., z_N$ är nu en dragning från en Markov-process med stationär fördelning $f$. 
 
