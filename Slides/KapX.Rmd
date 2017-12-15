@@ -1,0 +1,308 @@
+---
+title: "Statistisk inferensteori <br> "
+author: "Martin Sköld"
+output:
+  ioslides_presentation:
+    logo: SU_logo_CMYK.png
+    incremental: no
+    css: slides.css
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+handout <- FALSE
+library(MASS)
+suppressPackageStartupMessages(library(glmnet))
+```
+```{r, echo = handout}
+# Data och förberedelse
+
+set.seed(2666) # För att kunna reproducera
+
+# Luftkonditionering, tider mellan fel (från Cox, D.R. and Snell, E.J. (1981))
+ac <- c(90, 10, 60, 186, 61, 49, 14, 24, 56, 20, 79, 84, 44, 59, 29, 118, 25, 156, 310, 76, 26, 44, 23, 62, 130, 208, 70, 101)
+
+# Transformera Rs datamaterial "trees", svenska enheter och namn
+träd <- trees
+colnames(träd) <- c("Diameter", "Höjd", "Volym")
+träd <- transform(träd, Radie = Diameter / 39.37 / 2) # Tum till meter
+träd <- transform(träd, Höjd = Höjd / 3.28) # Fot till meter
+träd <- transform(träd, Volym = Volym / 3.28^3) # Kubikfot till kubikmeter
+träd <- subset(träd, select = -Diameter) # Ta bort diameter
+
+```
+
+```{r, echo = handout}
+## Funktioner
+
+# Weibull-likelihood
+L.weib <- Vectorize( # Möjliggör elementvis beräkning i (alpha, beta)
+  function(alpha, beta, data){
+    # Bestämmer likelihood givet en vektor observationer från Weibull(alpha, beta)
+    # Argument:
+    #     (alpha, beta): parametervärde (eventuellt vektorer)
+    #     data: observationsvektor
+    # Utdata:
+    #     Likelihoodfunktionens värden i (alpha, beta)
+    #
+    L.out <- prod(dweibull(data, shape = alpha, scale = 1 / beta))
+    if (is.nan(L.out))
+      L.out <- 0
+    return(L.out)
+  }
+  , vectorize.args = c("alpha", "beta"))
+l.weib <- Vectorize( # Möjliggör elementvis beräkning i theta
+  function(alpha, beta, data){
+    # Bestämmer loglikelihood givet en vektor observationer från Weibull(alpha, beta)
+    # Argument:
+    #     (alpha, beta): parametervärde (eventuellt vektorer)
+    #     data: observationsvektor
+    # Utdata:
+    #     loglikelihoodfunktionens värden i (alpha, beta)
+    #
+    l.out <- sum(log(dweibull(data, shape = alpha, scale = 1 / beta)))
+    return(l.out)
+  }
+  , vectorize.args = c("alpha", "beta"))
+# Score-vektor för Weibulllikelihood
+S.weib <- function(alpha, beta, data){
+    # Bestämmer scorevektor givet en vektor observationer från Weibull(alpha,beta)
+    # Argument:
+    #     (alpha,beta): parametervärden
+    #     data: observationsvektor
+    # Utdata:
+    #     Scorefunktionens värden i (alpha,beta)
+    #
+    S.out <- c(sum(1 / alpha+log(data * beta) * (1 - (data * beta)^alpha)),
+               alpha * sum(1 - (data * beta)^alpha) / beta)
+    return(S.out)
+}
+# Fisherinformation för Weibulllikelihood
+I.weib <- function(alpha, beta, data){
+    # Bestämmer informationsmatris givet en vektor observationer från Weibull(alpha,beta)
+    # Argument:
+    #     (alpha,beta): parametervärden
+    #     data: observationsvektor
+    # Utdata:
+    #     informationsmatrisens värden i (alpha,beta)
+    #
+    I11 <- sum(1 / alpha^2 + log(data * beta)^2 * (data * beta)^alpha)
+    I12 <- sum((data * beta)^alpha + alpha * log(data * beta) * (data * beta)^alpha - 1) / beta
+    I22 <- alpha * sum((alpha - 1) * (data * beta)^alpha + 1) / beta^2
+    I.out<-cbind(c(I11, I12), c(I12, I22))
+    return(I.out)}
+# Likelihood för modellen Volym_i=beta*Höjd_i*Radie_i^2+epsilon_i
+# med epsilon_i oberoende Normal(0, sigma2)
+P.träd <- Vectorize( # Möjliggör elementvis beräkning i (beta, sigma2)
+  function(beta, sigma2, data){
+    # Bestämmer likelihood i regressionsmodell för volymer av trädstammar
+    # Argument:
+    #     (beta, sigma2): parametervärde (eventuellt vektorer)
+    #     data: data.frame innehållander variablerna Volym, Radie och Höjd
+    # Utdata:
+    #     Likelihoodfunktionens värden i (beta, sigma2)
+    #    
+    L.out <- with(data, prod(dnorm(Volym, beta * Radie^2 * Höjd, sd = sqrt(sigma2)))) / sigma2
+    return(L.out)
+  },
+  vectorize.args = c("beta", "sigma2")
+)
+```
+
+
+# Bias vs Varians  $$ MSE=Var+Bias^2 $$
+
+## Bias vs Varians, Ö10
+```{r, echo = FALSE}
+theta <- seq(0,1, length.out = 1000)
+plot(theta, theta * (1 - theta) / 10, type = "l", ylim = c(0, 0.05), yaxs="i",
+     ylab = expression(MSE(theta)), xlab = expression(theta))
+lines(theta, theta * (1 - theta) / 40 + (theta / 2 - 1 / 4)^2, col = "blue")
+lines(theta, (theta - 1/2)^2, col = "red")
+
+```
+
+## Bias vs Varians, Ö10 med $n=100$
+```{r, echo = FALSE}
+theta <- seq(0,1, length.out = 1000)
+plot(theta, theta * (1 - theta) / 100, type = "l", ylim = c(0, 0.05), yaxs="i",
+     ylab = expression(MSE(theta)), xlab = expression(theta))
+lines(theta, theta * (1 - theta) / 400 + (theta / 2 - 1 / 4)^2, col = "blue")
+lines(theta, (theta - 1/2)^2, col = "red")
+
+```
+
+
+## Olf Faithful
+
+```{r, out.width = "300px"}
+knitr::include_graphics("Old_Faithfull-pdPhoto.jpg")
+```
+
+## Old Faitful väntetider
+
+```{r, echo = TRUE}
+plot(faithful$waiting)
+```
+
+
+## Kärnskattning av täthet
+
+```{r, echo = TRUE}
+plot(density(faithful$waiting))
+```
+
+## Kärnskattning av täthet
+
+```{r, echo = TRUE}
+plot(density(faithful$waiting, bw = 1))
+```
+
+## Kärnskattning av täthet
+
+```{r, echo = TRUE}
+plot(density(faithful$waiting, bw = 10))
+```
+
+## MSE ($f(x)=f''(x)=1$)
+```{r, echo = FALSE}
+h <- seq(0, 0.8, length.out = 100)
+plot(h, h^4/4+1/272/h, type = "l", xlab = expression(h), ylab = expression(MSE(h)), ylim = c(0,.05))
+lines(h, h^4/4, lty =3)
+lines(h, 1/272/h, lty =3)
+```
+
+
+## Ridge regression
+
+Linjär modell $Y=X\beta+\epsilon$. ML/MK-skattare
+$$
+\hat{\beta}=(X^TX)^{-1}X^T y
+$$
+minimerar $||y-X\beta||^2$.
+
+$\hat{\beta}$ är väntevärdesriktig med varians
+$$
+Var(\hat{\beta})=\sigma^2(X^TX)^{-1},
+$$
+som är minsta möjliga hos väntevärdesriktig skattare (Gauss-Markov).
+
+## Ridge regression
+
+Istället för att minimera $||y-X\beta||^2$ minimerar vi
+
+$$
+||y-X\beta||^2+\lambda||\beta||^2.
+$$
+
+- Lämpligt att standardisera $X$.
+
+- Bör ej straffa intercept, standardisera även $y$.
+
+
+## Ridge regression
+
+$||y-X\beta||^2+\lambda||\beta||^2$ har minimum i
+$$
+\hat{\beta}_R=(X^TX+\lambda I)^{-1}X^T y
+$$
+som har bias
+$$
+E(\hat{\beta}_R)-\beta=(X^TX+\lambda I)^{-1}X^TX\beta-\beta
+$$
+och varians
+$$
+Var(\hat{\beta}_R)=\sigma^2(X^TX+\lambda I)^{-1}X^TX(X^TX+\lambda I)^{-1}
+$$
+
+## Ridge regression
+
+```{r, echo = TRUE, fig.height=4}
+x1 <- scale(rnorm(20))
+x2 <- scale(rnorm(20, mean = x1, sd = .05))
+y <- scale(rnorm(20, mean = 1 + x1 + 2 * x2))
+plot(data.frame(y,x1,x2))
+```
+
+## Ridge regression
+
+```{r, echo = TRUE}
+lm(y ~ -1 + x1 + x2)$coef
+lm.ridge(y ~ -1 + x1 + x2, lambda = 1)
+
+```
+
+## Ridge regression
+
+```{r, echo = TRUE, echo = FALSE}
+lambda <- seq(0, 3, length.out = 100)
+plot(lm.ridge(y ~ -1 + x1 + x2, lambda = lambda))
+```
+
+## Ridge regression
+
+
+```{r, echo = FALSE}
+N <- 1000
+X <- cbind(x1,x2)
+XtX <- t(X) %*% X
+beta.hat <- solve(XtX)%*%t(X)%*%y
+lambda <- seq(0, 3, length.out = N)
+sigma2 <- 1
+b <- numeric(N)
+v <- numeric(N)
+for (i in 1:N){
+    hat.lambda <- solve(XtX +  diag(2)*lambda[i])%*%t(X)
+    b[i] <-  sum((hat.lambda%*%X%*%c(1,2)-c(1,2))^2)
+    v[i] <-  sum(diag(t(hat.lambda) %*% hat.lambda))
+}
+plot(lambda, b+v, type = "l", xlim = c(0,3), ylim = c(0,1), ylab="MSE", xlab = expression(lambda))
+lines(lambda, b, lty = 3)
+lines(lambda, v, lty = 3)
+```
+
+
+
+
+## Lasso
+Istället för att minimera $||y-X\beta||^2$ minimerar vi
+
+$$
+||y-X\beta||^2+|\beta|.
+$$
+```{r, echo = TRUE}
+glmnet(cbind(x1,x2), y, lambda = 1/length(x1), alpha = 1, intercept = FALSE)$beta
+```
+
+
+
+## Lasso
+
+```{r}
+fit <- glmnet(x=cbind(x1,x2), y=y, lambda = lambda/length(x1)/10, alpha = 1, intercept = FALSE)
+theta <- as.matrix(t(coef(fit)))
+plot(lambda/10, rev(theta[,3]), type = "l", ylim = c(-1,3), xlab = expression(lambda), ylab = expression(beta))
+lines(lambda/10, rev(theta[,2]), lty = 2, col = "red")
+```
+
+## Val av lambda med korsvalidering
+
+Vi kan minimera kvadratiskt prediktionsfel $E(X\hat{\beta}-Y)^2$, med leave-one-out
+
+$$
+CV(\lambda)=\sum_{i=1}^n (X_i\hat{\beta}_{-i}(\lambda)-y_i)^2
+$$
+
+## Lasso, körskoledata
+
+```{r}
+load("../Projekt/proj_data.Rdata")
+X <- scale(model.matrix(Resultat~., data=data_individ)[,-1])
+plot(glmnet(x=cbind(1,X), y = data_individ$Resultat, family = "binomial"), xvar="lambda", label = TRUE)
+abline(v=log(cv.glmnet(x=cbind(1,X), y = data_individ$Resultat, family = "binomial")$lambda.min))
+```
+
+
+
